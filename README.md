@@ -1,3 +1,5 @@
+Control de versiones: git flow
+
 Front: Nodejs 20.19.0, npm 10.x.x, Angular 20.x.x
 	Instalar NVM
 	NVM instala Nodejs 20.19.0 (nvm install 20.19.0)
