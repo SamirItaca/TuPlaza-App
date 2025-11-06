@@ -1,0 +1,1 @@
+Aqui ira todo lo relacionado con la base de datos, diagramas ERD, scripts necesarios, migraciones, etc..

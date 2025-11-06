@@ -1,0 +1,1 @@
+Aqui se almacenaran los documentos tecnicos (arquitectura, diagramas, etc), de codigo (jsdoc, phpdoc), y de API REST (Swagger, etc..)
