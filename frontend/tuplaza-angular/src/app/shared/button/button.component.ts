@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 type ButtonType = 'primary' | 'secundary';
@@ -60,6 +60,8 @@ export class ButtonComponent {
    */
   @Input() isDisabled: boolean = false;
 
+  @Output() onClick = new EventEmitter<void>();
+
   /** Prefijo base para las clases CSS del botón. */
   private baseCss: string = 'tuplaza-btn-';
 
@@ -75,5 +77,11 @@ export class ButtonComponent {
     md: this.baseCss + 'md',
     lg: this.baseCss + 'lg'
   } as const;
+
+  emitClick() {
+    if (!this.isDisabled) {
+      this.onClick.emit();
+    }
+  }
 
 }

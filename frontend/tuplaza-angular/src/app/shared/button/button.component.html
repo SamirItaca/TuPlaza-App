@@ -1,6 +1,7 @@
 
 <button class="tuplaza-btn" 
         [ngClass]="[CLASS_BY_TYPE[type], CLASS_BY_SIZE[size]]"
-        [disabled]="isDisabled">
+        [disabled]="isDisabled"
+        (click)="emitClick()">
     {{ text }}
 </button>
