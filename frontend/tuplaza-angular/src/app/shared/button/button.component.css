@@ -1,0 +1,66 @@
+.tuplaza-btn {
+    width: 100%;
+    border-radius: 16px;
+}
+
+.tuplaza-btn-primary {
+    border: solid 1px #970707;
+    background-color: #F4B6B6;
+    color: black;
+}
+
+.tuplaza-btn-secundary {
+    border: solid 1px black;
+    background-color: #FFFFFF;
+    color: black;
+}
+
+/* Variantes */
+.tuplaza-btn-sm {
+  padding: 8px 12px;
+  font-size: 0.875rem;
+}
+
+.tuplaza-btn-md {
+  padding: 10px 16px;
+  font-size: 1rem;
+}
+
+.tuplaza-btn-lg {
+  padding: 14px 20px;
+  font-size: 1.125rem;
+}
+
+/* Hover */
+.tuplaza-btn:hover {
+    cursor: pointer;
+}
+
+.tuplaza-btn-primary:hover {
+  border: solid 1px #FFFFFF;
+  background-color: #FF9C9C;
+  color: #FFFFFF;
+}
+
+.tuplaza-btn-secundary:hover {
+  border: solid 1px #970707;
+  background-color: #FFFFFF;
+  color: #970707;
+}
+
+/* Disabled */
+.tuplaza-btn:disabled {
+    cursor: not-allowed;
+}
+
+.tuplaza-btn-primary:disabled {
+  border: solid 1px #CEC8C8;
+  background-color: #FFEBEB;
+  color: #CEC8C8;
+}
+
+.tuplaza-btn-secundary:disabled {
+  border: solid 1px #CEC8C8;
+  background-color: #FBFBFB;
+  color: #CEC8C8;
+}
