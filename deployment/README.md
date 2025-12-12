@@ -27,3 +27,5 @@ FLUJO DEL DESPLIEGUE AUTOMATICO DEL FRONT (Proyecto Angular)
 
 - Acceso a la web
     Angular estará disponible desde cualquier navegador en: http://79.116.49.226/
+
+    
