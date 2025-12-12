@@ -1,1 +1,27 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  /* Colores corporativos */
+  --tpl-primary: #970707;
+
+  /* Principales */
+  --tpl-primary-border: #970707;
+  --tpl-primary-border-hover: #FFFFFF;
+  --tpl-primary-bg: #F4B6B6;
+  --tpl-primary-bg-hover: #FF9C9C;
+  --tpl-primary-text: #000000;
+  --tpl-primary-text-hover: #FFFFFF;
+
+  /* Secundarios */
+  --tpl-secondary-border: #000000;
+  --tpl-secondary-border-hover: #970707;
+  --tpl-secondary-bg: #FFFFFF;
+  --tpl-secondary-bg-hover: #FFFFFF;
+  --tpl-secondary-text: #000000;
+  --tpl-secondary-text-hover: #970707;
+
+  /* Disabled */
+  --tpl-disabled-border-text: #CEC8C8;
+  --tpl-disabled-primary-bg: #FFEBEB;
+  --tpl-disabled-secondary-bg: #FBFBFB;
+  
+}
+

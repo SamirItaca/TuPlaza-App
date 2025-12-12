@@ -1,0 +1,66 @@
+.tuplaza-btn {
+    width: 100%;
+    border-radius: 16px;
+}
+
+.tuplaza-btn-primary {
+    border: solid 1px var(--tpl-primary-border);
+    background-color: var(--tpl-primary-bg);
+    color: var(--tpl-primary-text);
+}
+
+.tuplaza-btn-secundary {
+    border: solid 1px var(--tpl-secondary-border);
+    background-color: var(--tpl-secondary-bg);
+    color: var(--tpl-secondary-text);
+}
+
+/* Variantes */
+.tuplaza-btn-sm {
+  padding: 8px 12px;
+  font-size: 0.875rem;
+}
+
+.tuplaza-btn-md {
+  padding: 10px 16px;
+  font-size: 1rem;
+}
+
+.tuplaza-btn-lg {
+  padding: 14px 20px;
+  font-size: 1.125rem;
+}
+
+/* Hover */
+.tuplaza-btn:hover {
+    cursor: pointer;
+}
+
+.tuplaza-btn-primary:hover {
+  border: solid 1px var(--tpl-primary-border-hover);
+  background-color: var(--tpl-primary-bg-hover);
+  color: var(--tpl-primary-text-hover);
+}
+
+.tuplaza-btn-secundary:hover {
+  border: solid 1px var(--tpl-secondary-border-hover);
+  background-color: var(--tpl-secondary-bg-hover);
+  color: var(--tpl-secondary-text-hover);
+}
+
+/* Disabled */
+.tuplaza-btn:disabled {
+    cursor: not-allowed;
+}
+
+.tuplaza-btn-primary:disabled {
+  border: solid 1px var(--tpl-disabled-border-text);
+  background-color: var(--tpl-disabled-primary-bg);
+  color: var(--tpl-disabled-border-text);
+}
+
+.tuplaza-btn-secundary:disabled {
+  border: solid 1px var(--tpl-disabled-border-text);
+  background-color: var(--tpl-disabled-secondary-bg);
+  color: var(--tpl-disabled-border-text);
+}

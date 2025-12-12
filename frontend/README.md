@@ -4,3 +4,5 @@ Nodejs 20.19.0, npm 10.x.x, Angular 20.x.x
 	nvm use 20.19.0
 	Verificar versiones (node -v, npm -v)
 	Instalar Angular Cli (npm install -g @angular/cli@latest)
+
+Documentacion: JSDoc
