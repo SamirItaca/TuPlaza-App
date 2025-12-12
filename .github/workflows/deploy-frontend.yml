@@ -1,0 +1,68 @@
+name: Deploy Angular Frontend
+
+on:
+  push:
+    branches:
+      - master     # Se ejecuta automáticamente al hacer push a master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descargar el código del repo
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Configurar Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/tuplaza-angular/package-lock.json
+
+      # 3. Instalar dependencias
+      - name: Install dependencies
+        run: |
+          cd frontend/tuplaza-angular
+          npm ci
+
+      # 4. Compilar Angular
+      - name: Build Angular
+        run: |
+          cd frontend/tuplaza-angular
+          npm run build --prod
+
+      # 5. Construir imagen Docker (usa tu Dockerfile en deployment/frontend)
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t tuplaza-frontend \
+            -f deployment/frontend/Dockerfile .
+
+      # 6. Login a Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # 7. Etiquetar y subir imagen
+      - name: Push Docker image
+        run: |
+          docker tag tuplaza-frontend ${{ secrets.DOCKER_USERNAME }}/tuplaza-frontend:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/tuplaza-frontend:latest
+
+      # 8. Desplegar automáticamente en tu servidor
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/tuplaza-frontend:latest
+            docker stop tuplaza-frontend || true
+            docker rm tuplaza-frontend || true
+            docker run -d -p 8080:80 --name tuplaza-frontend ${{ secrets.DOCKER_USERNAME }}/tuplaza-frontend:latest
