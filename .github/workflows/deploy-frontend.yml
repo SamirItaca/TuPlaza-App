@@ -66,7 +66,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/tuplaza-frontend:latest
-            docker stop tuplaza-frontend || true
-            docker rm tuplaza-frontend || true
-            docker run -d -p 8080:80 --name tuplaza-frontend ${{ secrets.DOCKER_USERNAME }}/tuplaza-frontend:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/tuplaza-frontend:latest
+            sudo docker stop tuplaza-frontend || true
+            sudo docker rm tuplaza-frontend || true
+            sudo docker run -d -p 8080:80 --name tuplaza-frontend ${{ secrets.DOCKER_USERNAME }}/tuplaza-frontend:latest
