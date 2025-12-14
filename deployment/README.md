@@ -26,4 +26,6 @@ FLUJO DEL DESPLIEGUE AUTOMATICO DEL FRONT (Proyecto Angular)
     Levanta un nuevo contenedor en el puerto 80 (docker run -d -p 80:80).
 
 - Acceso a la web
-    Angular estará disponible desde cualquier navegador en: http://79.116.49.226/
+    Angular estará disponible desde cualquier navegador en: http://hexamir.ddns.net/
+
+    
