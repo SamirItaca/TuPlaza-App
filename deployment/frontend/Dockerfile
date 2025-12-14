@@ -28,3 +28,4 @@ EXPOSE 80
 
 # Comando por defecto
 CMD ["nginx", "-g", "daemon off;"]
+
