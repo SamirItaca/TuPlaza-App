@@ -18,7 +18,7 @@ RUN npm run build --prod
 FROM nginx:alpine
 
 # Copiar configuración personalizada de nginx
-COPY frontend/nginx.conf /etc/nginx/nginx.conf
+COPY deployment/frontend/nginx.conf /etc/nginx/nginx.conf
 
 # Copiar build de Angular
 COPY --from=build /app/dist/tuplaza-angular /usr/share/nginx/html
