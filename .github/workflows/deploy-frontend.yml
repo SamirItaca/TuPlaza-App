@@ -39,8 +39,7 @@ jobs:
         run: |
           docker build \
             -t tuplaza-frontend \
-            -f deployment/frontend/Dockerfile \
-            frontend/tuplaza-angular
+            -f deployment/frontend/Dockerfile .
 
       # 6. Login a Docker Hub
       - name: Login to Docker Hub
