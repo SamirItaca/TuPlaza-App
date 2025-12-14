@@ -8,7 +8,7 @@ COPY frontend/tuplaza-angular/package*.json ./
 RUN npm ci
 
 # Copiar todo el proyecto
-COPY frontend/tuplaza-angular/ ./
+COPY . .
 
 # Compilar Angular para producción
 RUN npm run build --prod
