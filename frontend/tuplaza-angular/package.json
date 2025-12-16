@@ -9,7 +9,10 @@
     "test": "ng test",
     "build:ios": "ng build --configuration production && npx cap copy ios",
     "open:ios": "npx cap open ios",
-    "run:ios": "ng build --configuration production && npx cap copy ios && npx cap open ios"
+    "run:ios": "ng build --configuration production && npx cap copy ios && npx cap open ios",
+    "build:android": "ng build --configuration && npx cap copy android",
+    "open:android": "npx cap open android",
+    "run:android": "ng build --configuration production && npx cap copy android && npx cap open android"
   },
   "prettier": {
     "printWidth": 100,
@@ -31,6 +34,7 @@
     "@angular/forms": "^20.3.0",
     "@angular/platform-browser": "^20.3.0",
     "@angular/router": "^20.3.0",
+    "@capacitor/android": "^8.0.0",
     "@capacitor/cli": "^7.4.4",
     "@capacitor/core": "^8.0.0",
     "@capacitor/ios": "^8.0.0",
