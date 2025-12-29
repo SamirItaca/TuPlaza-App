@@ -1,31 +1,39 @@
-<p>formulario works!</p>
-<input class="input1" type="text" name="Campo" id="campo" placeholder="Campo" />
-<input class="input2" type="text" name="Campo-error" id="campo-error" placeholder="Campor error" />
-<input
-  class="input3"
-  type="text"
-  name="Campo-hover"
-  id="campo-hover"
-  placeholder=" Campo hover activo"
-/>
-<input
-  class="input4"
-  type="text"
-  name="Campo-deshabilitado"
-  id="Campo-deshabilitado"
-  placeholder="campo deshabilitado"
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 />
 
-<select class="select1" name="select-Campo" id="select-campo" placeholder="">
-  <option value="">Selecciona un campo</option>
-</select>
+<!-- <p>formulario works!</p>  -->
 
-<select class="select2" name="select-error" id="select-error" placeholder="">
-  <option value="">Selecciona error</option>
+<div class="input-wrapper">
+  <input class="input1" type="text" placeholder="Campo" />
+  <i class="fas fa-user icon"></i>
+</div>
+
+<div class="input-wrapper error">
+  <input class="input2" type="text" placeholder="Campo error" />
+  <i class="fas fa-user icon"></i>
+</div>
+
+<div class="input-wrapper">
+  <input class="input3" type="text" placeholder="Campo hover activo" />
+  <i class="fas fa-user icon"></i>
+</div>
+
+<div class="input-wrapper">
+  <input class="input4" type="text" placeholder="Campo deshabilitado" disabled />
+  <i class="fas fa-user icon"></i>
+</div>
+
+<select class="select1">
+  <option>Selecciona un campo</option>
 </select>
-<select class="select3" name="select-hover" id="select-hover" placeholder="">
-  <option value="">Selecciona hover-activo</option>
+<select class="select2">
+  <option>Selecciona error</option>
 </select>
-<select class="select4" name="select-deshabilitado" id="select-deshabilitado" placeholder="">
-  <option value="">Selecciona deshabilitado</option>
+<select class="select3">
+  <option>Selecciona hover-activo</option>
+</select>
+<select class="select4" disabled>
+  <option>Selecciona deshabilitado</option>
 </select>

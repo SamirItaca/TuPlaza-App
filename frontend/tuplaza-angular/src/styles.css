@@ -3,25 +3,31 @@
   --tpl-primary: #970707;
 
   /* Principales */
-  --tpl-primary-border: #970707;
-  --tpl-primary-border-hover: #FFFFFF;
-  --tpl-primary-bg: #F4B6B6;
-  --tpl-primary-bg-hover: #FF9C9C;
+  --tpl-primary-border: #970707; /* error */
+  --tpl-primary-border-hover: #ffffff;
+  --tpl-primary-bg: #f4b6b6;
+  --tpl-primary-bg-hover: #ff9c9c;
+  
   --tpl-primary-text: #000000;
-  --tpl-primary-text-hover: #FFFFFF;
+  --tpl-primary-text-hover: #ffffff;
 
   /* Secundarios */
   --tpl-secondary-border: #000000;
   --tpl-secondary-border-hover: #970707;
-  --tpl-secondary-bg: #FFFFFF;
-  --tpl-secondary-bg-hover: #FFFFFF;
+  --tpl-secondary-bg: #ffffff;
+  --tpl-secondary-bg-hover: #ffffff;
   --tpl-secondary-text: #000000;
   --tpl-secondary-text-hover: #970707;
 
   /* Disabled */
-  --tpl-disabled-border-text: #CEC8C8;
-  --tpl-disabled-primary-bg: #FFEBEB;
-  --tpl-disabled-secondary-bg: #FBFBFB;
-  
-}
+  --tpl-disabled-border-text: #cec8c8;
+  --tpl-disabled-primary-bg: #ffebeb;
+  --tpl-disabled-secondary-bg: #fbfbfb;
 
+  /* error*/
+
+  --tpl-error-text: #ff0000;
+  --tpl-error-border: #ff0000;
+  --tpl-error-background: #ffffff;
+  --tpl-primary-placeholder-error:#fb7185;
+}
