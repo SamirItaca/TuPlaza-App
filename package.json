@@ -1,0 +1,14 @@
+{
+  "name": "tuplaza-app",
+  "version": "1.0.0",
+  "description": "Aplicacion de alquiler de garajes",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "ssh:servidor": "ssh tuplaza@tuplaza.ddns.net"
+  },
+  "author": "Samir&Jonnatan",
+  "license": "ISC"
+}
