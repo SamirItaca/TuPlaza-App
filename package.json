@@ -7,7 +7,8 @@
     "test": "tests"
   },
   "scripts": {
-    "ssh:servidor": "ssh tuplaza@tuplaza.ddns.net"
+    "ssh:servidor": "ssh tuplaza@tuplaza.ddns.net",
+    "database:local": "cd database/docker && docker-compose up -d"
   },
   "author": "Samir&Jonnatan",
   "license": "ISC"
