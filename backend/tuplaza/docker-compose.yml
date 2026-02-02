@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ../../deployment/backend
+      dockerfile: Dockerfile
+    container_name: tuplaza-backend-local
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    networks:
+      - tuplaza-network
+    env_file:
+      - .env.local
+    volumes:
+      - ../../backend/tuplaza:/var/www/html
+
+networks:
+  tuplaza-network:
+    name: tuplaza-network

@@ -14,6 +14,8 @@ services:
       - mysql_data_local:/var/lib/mysql
     ports:
       - "3307:3306" # acceso desde tu PC
+    networks:
+      - tuplaza-network
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -26,6 +28,12 @@ services:
       PMA_PORT: 3306
     ports:
       - "8080:80"
+    networks:
+      - tuplaza-network
 
 volumes:
   mysql_data_local:
+
+networks:
+  tuplaza-network:
+    name: tuplaza-network

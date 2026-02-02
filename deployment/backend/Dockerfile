@@ -1,17 +1,10 @@
-# Imagen base con PHP y Apache
-FROM php:8.2-apache
+FROM php:8.5-apache
 
-# Habilitar mod_rewrite (para APIs / frameworks)
-RUN a2enmod rewrite
-
-# Instalar dependencias del sistema necesarias para PHP
-RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    libzip-dev \
+# Habilitar mod_rewrite e instalar dependencias
+RUN a2enmod rewrite \
+    && apt-get update && apt-get install -y git unzip libzip-dev \
     && docker-php-ext-install zip pdo pdo_mysql \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -19,20 +12,20 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # Directorio de trabajo
 WORKDIR /var/www/html
 
-# Copiar composer primero (mejora cache)
-COPY backend/composer.json backend/composer.lock ./
+# Configurar DocumentRoot a public/ y permisos Apache
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
+    && echo "<Directory /var/www/html/public>" > /etc/apache2/conf-available/laravel.conf \
+    && echo "    AllowOverride All" >> /etc/apache2/conf-available/laravel.conf \
+    && echo "    Require all granted" >> /etc/apache2/conf-available/laravel.conf \
+    && echo "</Directory>" >> /etc/apache2/conf-available/laravel.conf \
+    && a2enconf laravel
 
-# Instalar dependencias PHP (sin dev, optimizado)
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-# Copiar el resto del código del backend
-COPY backend/ ./
-
-# Permisos (importante en Linux)
-RUN chown -R www-data:www-data /var/www/html
+# Copiar entrypoint y dar permisos
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Exponer puerto 80
 EXPOSE 80
 
-# Apache en primer plano
-CMD ["apache2-foreground"]
+# CMD final: entrypoint
+CMD ["entrypoint.sh"]

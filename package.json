@@ -8,7 +8,9 @@
   },
   "scripts": {
     "ssh:servidor": "ssh tuplaza@tuplaza.ddns.net",
-    "database:local": "cd database/docker && docker-compose up -d"
+    "docker:network": "docker network create tuplaza-network || true",
+    "database:local": "cd database/docker && docker-compose up -d",
+    "servidor:local": "cd backend/tuplaza && docker-compose up -d"
   },
   "author": "Samir&Jonnatan",
   "license": "ISC"
