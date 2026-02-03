@@ -2,7 +2,7 @@ FROM php:8.5-apache
 
 # Habilitar mod_rewrite e instalar dependencias
 RUN a2enmod rewrite \
-    && apt-get update && apt-get install -y git unzip libzip-dev \
+    && apt-get update && apt-get install -y git unzip libzip-dev default-mysql-client \
     && docker-php-ext-install zip pdo pdo_mysql \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 

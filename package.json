@@ -10,7 +10,8 @@
     "ssh:servidor": "ssh tuplaza@tuplaza.ddns.net",
     "docker:network": "docker network create tuplaza-network || true",
     "database:local": "cd database/docker && docker-compose up -d",
-    "servidor:local": "cd backend/tuplaza && docker-compose up -d"
+    "server:local": "cd backend/tuplaza && docker-compose up -d",
+    "client:local": "cd frontend/tuplaza-angular && docker-compose up -d"
   },
   "author": "Samir&Jonnatan",
   "license": "ISC"

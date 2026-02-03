@@ -15,6 +15,7 @@ services:
       - .env.local
     volumes:
       - ../../backend/tuplaza:/var/www/html
+      - /var/www/html/vendor
 
 networks:
   tuplaza-network:

@@ -62,12 +62,20 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            # NETWORK DOCKER
+            docker network create tuplaza-network || true
+
+            # LEVANTAR BASE DE DATOS PRODUCCION
+            cd /home/tuplaza/proyecto/TuPlaza/mysql-prod
+            docker compose up -d
+
             # FRONTEND
             docker pull ${{ secrets.DOCKER_USERNAME }}/tuplaza-frontend:latest
             docker stop tuplaza-frontend || true
             docker rm tuplaza-frontend || true
             docker run -d \
               --restart unless-stopped \
+              --network tuplaza-network \
               -p 8080:80 \
               --name tuplaza-frontend \
               ${{ secrets.DOCKER_USERNAME }}/tuplaza-frontend:latest
@@ -78,6 +86,8 @@ jobs:
             docker rm tuplaza-backend || true
             docker run -d \
               --restart unless-stopped \
+              --env-file /home/tuplaza/proyecto/TuPlaza/laravel-config/.env \
+              --network tuplaza-network \
               -p 8081:80 \
               --name tuplaza-backend \
               ${{ secrets.DOCKER_USERNAME }}/tuplaza-backend:latest
