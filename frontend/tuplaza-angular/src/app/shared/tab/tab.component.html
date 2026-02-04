@@ -1,12 +1,8 @@
 <ion-tabs>
-
-  <ion-tab-bar slot="bottom">
-
-    <ion-tab-button *ngFor="let tab of tabButtons" tab="{{tab.tab}}">
-      <ion-icon name="{{tab.iconName}}"></ion-icon>
+  <ion-tab-bar slot="bottom" class="custom-tab-bar">
+    <ion-tab-button *ngFor="let tab of tabButtons" [tab]="tab.tab" class="custom-tab-button">
+      <ion-icon [name]="tab.iconName"></ion-icon>
       {{tab.text}}
     </ion-tab-button>
-
   </ion-tab-bar>
-
 </ion-tabs>
