@@ -10,6 +10,7 @@
 /* Botón hamburguesa */
 .menu-button {
   color: #ffffff;
+  font-size: 40px; /* tamaño del icono */
 }
 
 /* Contenedor del input */
