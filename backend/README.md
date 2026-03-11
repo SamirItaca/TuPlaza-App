@@ -1,1 +1,1 @@
-Aqui iria el proyecto Laravel
+Aqui iria el proyecto django
