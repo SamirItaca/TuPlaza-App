@@ -29,7 +29,7 @@ class Reserva(models.Model):
 
 # 4. Fotos Garaje 
 class FotoGaraje(models.Model):
-    garaje = models.ForeignKey(Garaje, on_delete=models.CASCADE, related_name='fotos')
+    garaje = models.ForeignKey(Garaje, related_name='fotos', on_delete=models.CASCADE)
     id_imagen = models.CharField(max_length=255) 
 
 # 5. Pagos 
@@ -41,6 +41,7 @@ class Pago(models.Model):
 
 # 6. Reseñas 
 class Resena(models.Model):
+    garaje = models.ForeignKey(Garaje, related_name='resenas', on_delete=models.CASCADE)
     reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     puntuacion = models.IntegerField()

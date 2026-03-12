@@ -17,17 +17,28 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from api.views import UsuarioViewSet, GarajeViewSet, ReservaViewSet
+from django.conf import settings # Importante para las imágenes
+from django.conf.urls.static import static # Importante para las imágenes
+from api.views import (
+    UsuarioViewSet, GarajeViewSet, ReservaViewSet, 
+    PagoViewSet, ResenaViewSet, FotoGarajeViewSet
+)
 
-# 1. el router que generará automáticamente las URLs
+# 1. El router genera automáticamente las URLs (CRUD completo)
 router = DefaultRouter()
 router.register(r'usuarios', UsuarioViewSet)
 router.register(r'garajes', GarajeViewSet)
 router.register(r'reservas', ReservaViewSet)
+router.register(r'pagos', PagoViewSet)
+router.register(r'resenas', ResenaViewSet)
+router.register(r'fotos', FotoGarajeViewSet)
 
-# 2. patrón de URLs
+# 2. Definición de rutas principales
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)), 
 ]
 
+# 3. Configuración para ver las fotos en el navegador durante el desarrollo
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
