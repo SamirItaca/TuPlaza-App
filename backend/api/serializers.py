@@ -16,3 +16,8 @@ class GarajeSerializer(serializers.ModelSerializer):
             'id', 'descripcion', 'precio', 'disponible', 
             'propietario', 'propietario_detalle'
         ] 
+
+class ReservaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reserva
+        fields = '__all__'

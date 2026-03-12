@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser # Para ampliar Usuarios
+from django.contrib.auth.models import AbstractUser
 
 # 1. Usuarios 
 class Usuario(models.Model):
@@ -7,7 +7,7 @@ class Usuario(models.Model):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
     telefono = models.CharField(max_length=20, blank=True)
-    tipo_usuario = models.CharField(max_length=50) # Ej: Arrendador/Arrendatario
+    tipo_usuario = models.CharField(max_length=50) # Arrendador/Arrendatario
     verificado = models.BooleanField(default=False)
 
 # 2. Garajes 
