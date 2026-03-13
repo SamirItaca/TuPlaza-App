@@ -1,0 +1,48 @@
+/* Toolbar roja */
+.custom-toolbar {
+  --background: #9C4040;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.25);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  padding: 8px 12px;
+}
+
+/* Botón hamburguesa */
+.menu-button {
+  color: #ffffff;
+  font-size: 40px; /* tamaño del icono */
+}
+
+/* Contenedor del input */
+.search-item {
+  --background: #ffffff;
+  --inner-padding-start: 8px;
+  --inner-padding-end: 8px;
+
+  border-radius: 8px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+
+  overflow: hidden;
+  flex: 1;
+}
+
+/* Quita el highlight/border de ion-item */
+.search-item::part(native) {
+  background: #ffffff;
+  border-radius: 8px;
+}
+
+/* Icono de búsqueda */
+.search-icon {
+  color: #B5B5B5;
+  font-size: 20px;
+  margin-right: 4px;
+}
+
+/* Input */
+ion-input {
+  --color: #000000;
+  --placeholder-color: #B5B5B5;
+  --placeholder-opacity: 1;
+}
+

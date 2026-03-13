@@ -1,0 +1,41 @@
+/* Header del menú */
+.menu-toolbar {
+  --background: #9C4040;
+  --color: #ffffff;
+}
+
+/* Título blanco */
+.menu-toolbar ion-title {
+  color: #ffffff;
+}
+
+/* Fondo blanco del contenido */
+.menu-content {
+  --background: #ffffff;
+}
+
+/* Items normales */
+ion-item {
+  --background: #ffffff;
+  --color: #000000;
+  --inner-padding-start: 16px;
+  font-size: 16px;
+  --inner-border-width: 0;
+}
+
+/* Iconos normales */
+ion-item ion-icon {
+  color: #000000;
+  font-size: 24px;
+}
+
+/* Item activo (pantalla actual) */
+ion-item.active-item {
+  --color: #9C4040;
+  font-weight: 500;
+}
+
+/* Icono activo */
+ion-item.active-item ion-icon {
+  color: #9C4040;
+}
