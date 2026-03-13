@@ -1,14 +1,25 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
 # 1. Usuarios 
 class Usuario(models.Model):
+    # Esto vincula el modelo con el sistema de autenticación de Django
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name='perfil'
+    )
+
     nombre = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
     telefono = models.CharField(max_length=20, blank=True)
     tipo_usuario = models.CharField(max_length=50) # Arrendador/Arrendatario
     verificado = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.user.username
 
 # 2. Garajes 
 class Garaje(models.Model):
