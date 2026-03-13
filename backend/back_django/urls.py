@@ -23,6 +23,10 @@ from api.views import (
     UsuarioViewSet, GarajeViewSet, ReservaViewSet, 
     PagoViewSet, ResenaViewSet, FotoGarajeViewSet
 )
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 # 1. El router genera automáticamente las URLs (CRUD completo)
 router = DefaultRouter()
@@ -37,6 +41,11 @@ router.register(r'fotos', FotoGarajeViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)), 
+
+    #rutas para el login 
+
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
 # 3. Configuración para ver las fotos en el navegador durante el desarrollo
