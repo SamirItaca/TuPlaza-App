@@ -21,7 +21,7 @@ from django.conf import settings # Importante para las imágenes
 from django.conf.urls.static import static # Importante para las imágenes
 from api.views import (
     UsuarioViewSet, GarajeViewSet, ReservaViewSet, 
-    PagoViewSet, ResenaViewSet, FotoGarajeViewSet
+    PagoViewSet, ResenaViewSet, FotoGarajeViewSet, RegistroView
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -46,6 +46,7 @@ urlpatterns = [
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/registro/', RegistroView.as_view(), name='registro'),
 ]
 
 # 3. Configuración para ver las fotos en el navegador durante el desarrollo
