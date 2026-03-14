@@ -1,0 +1,138 @@
+/* Estilos generales para todos los inputs */
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 15px;
+}
+
+/* Estilo del icono */
+.input-wrapper .icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #adb5bd;
+  transition: all 0.3s ease;
+  pointer-events: none; /* Esto permite que si haces clic en el icono, el input reciba el clic */
+}
+ .icon:hover {
+
+  color: #000000;
+}
+
+/* Ajuste necesario en el Input */
+input[type="text"] {
+  width: 100%;
+  padding: 12px 12px 12px 45px; 
+  border-radius: 12px;
+  border: 2px solid #dee2e6;
+  outline: none;
+  box-sizing: border-box;
+  display: block;
+}
+
+
+/* 2. Color de icono en caso de Error */
+.input-wrapper.error .icon {
+  color:var(--tpl-error-text);
+}
+
+
+.input1 {
+  border-color: #dee2e6;
+}
+.input1:focus {
+  border-color:var(--tpl-secondary-border);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/*  Input  Error */
+
+.input2 {
+  border-color: var(--tpl-error-border) !important; /* El !important asegura que gane a otras reglas generales */
+  background-color: var(--tpl-error-background);
+}
+
+
+.input2::placeholder {
+  color:var( --tpl-primary-placeholder-error);
+}
+
+/* Si quieres que el icono del error también sea persistente */
+.input2 + .icon {
+  color: var(--tpl-error-border);
+}
+
+
+.input3:hover::placeholder {
+  color: var( --tpl-secondary-text);
+  border-color:var(--tpl-secondary-border);
+}
+.input3:hover {
+
+  border-color:var(--tpl-secondary-border);
+}
+
+.input3:hover + .icon {
+ color: var( --tpl-secondary-text); 
+}
+
+/* 4. Input Deshabilitado */
+.input4:disabled,
+.input4[disabled] {
+  background-color: var( --tpl-disabled-primary-bg);
+  border-color: var(   --tpl-disabled-border-text);
+  color: var(  --tpl-disabled-border-text);
+  cursor: not-allowed;
+}
+
+
+
+/* Estilos generales para todos los selects */
+
+
+
+select {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  border-radius: 12px; /* Aquí controlas el redondeo */
+  border: 2px solid #ccc;
+  background-color: #fff;
+  font-size: 16px;
+  color: #333;
+  outline: none;
+  transition: all 0.3s ease; /* Suaviza los cambios de color */
+  cursor: pointer;
+}
+
+/* 1. Select Campo (Estado Normal/Base) */
+.select1 {
+  border-color: #757c85;
+}
+
+/* 2. Select Error */
+.select2 {
+  border-color:var( --tpl-error-border);
+  color:var( --tpl-error-text);
+  background-color:var( --tpl-error-background);
+}
+
+.select3:hover {
+  border-color:var( --tpl-secondary-border);
+  background-color:var( --tpl-secondary-bg);
+}
+
+
+/* 4. Select Deshabilitado */
+/* Se aplica cuando el select tiene el atributo 'disabled' */
+.select4:disabled, 
+select[disabled] {
+  background-color: var(--tpl-disabled-primary-bg);
+  border-color: var(  --tpl-disabled-border-text);
+  color: var( --tpl-disabled-border-text);
+  cursor: not-allowed;
+  opacity: 0.8;
+}
