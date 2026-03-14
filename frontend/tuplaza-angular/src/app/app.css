@@ -1,0 +1,25 @@
+ion-app {
+    background-color: #F9F9F9;
+}
+
+#main-content {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header fijo arriba */
+tuplaza-nav {
+  flex-shrink: 0;
+}
+
+/* Tabs fijos abajo */
+tuplaza-tab {
+  flex-shrink: 0;
+}
+
+/* Contenido central */
+main.container {
+  flex: 1;
+  overflow-y: auto;
+}

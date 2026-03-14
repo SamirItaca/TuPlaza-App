@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  mysql_prod:
+    image: mysql:8.0
+    container_name: mysql_prod
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"  # host: contenedor
+    volumes:
+      - mysql_prod_data:/var/lib/mysql
+
+  phpmyadmin_prod:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin_prod
+    restart: always
+    depends_on:
+      - mysql_prod
+    environment:
+      PMA_HOST: mysql_prod
+      PMA_PORT: 3306
+    ports:
+      - "1011:80"
+
+volumes:
+  mysql_prod_data:

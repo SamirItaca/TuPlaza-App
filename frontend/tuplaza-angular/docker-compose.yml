@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  frontend-dev:
+    image: node:20-alpine
+    container_name: tuplaza-frontend-local
+    working_dir: /app
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    command: sh -c "npm install -g @angular/cli && npm install && ng serve --host 0.0.0.0 --port 4200"
+    networks:
+      - tuplaza-network
+
+networks:
+  tuplaza-network:
+    external: true
