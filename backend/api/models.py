@@ -1,6 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from django.core.exceptions import ValidationError
+from PIL import Image
+import io
+from django.core.files.base import ContentFile
 
 # 1. Usuarios 
 class Usuario(models.Model):
@@ -39,9 +43,55 @@ class Reserva(models.Model):
     estado = models.CharField(max_length=50, default='pendiente')
 
 # 4. Fotos Garaje 
+
+def validar_tamano_foto(file):
+    # Límite de 2 Megabytes
+    limite_megabytes = 2.0
+    if file.size > limite_megabytes * 1024 * 1024:
+        raise ValidationError(f"La imagen no puede pesar más de {limite_megabytes}MB")
 class FotoGaraje(models.Model):
     garaje = models.ForeignKey(Garaje, related_name='fotos', on_delete=models.CASCADE)
-    id_imagen = models.CharField(max_length=255) 
+    imagen = models.ImageField(upload_to='garajes/%Y/%m/%d/')
+    descripcion = models.CharField(max_length=200, blank=True, null=True)
+
+    def __str__(self):
+        return f"Foto {self.id} del garaje {self.garaje.id}"
+
+    def save(self, *args, **kwargs):
+        # Solo procesamos si hay una imagen nueva o modificada
+        if self.imagen and not self.id: # Solo al crear (o si quieres siempre, quita "and not self.id")
+            self.optimizar_imagen()
+        super().save(*args, **kwargs)
+
+    def optimizar_imagen(self):
+        # 1. Abrir la imagen subida
+        img = Image.open(self.imagen)
+        
+        # 2. Convertir a RGB (necesario para guardar como JPEG si viene de PNG/otros)
+        if img.mode != 'RGB':
+            img = img.convert('RGB')
+
+        # 3. Redimensionar si es más ancha de 1200px (manteniendo proporción)
+        if img.width > 1200:
+            nuevo_ancho = 1200
+            nuevo_alto = int((nuevo_ancho * img.height) / img.width)
+            img = img.resize((nuevo_ancho, nuevo_alto), Image.LANCZOS)
+
+        # 4. Comprimir en memoria
+        buffer = io.BytesIO()
+        img.save(buffer, format='JPEG', quality=85, optimize=True)
+        buffer.seek(0)
+
+        # 5. Reemplazar el archivo original por el optimizado
+        # Cambiamos la extensión a .jpg ya que lo hemos convertido
+        nombre_base = os.path.splitext(self.imagen.name)[0]
+        nuevo_nombre = f"{nombre_base}.jpg"
+        
+        self.imagen.save(nuevo_nombre, ContentFile(buffer.getvalue()), save=False)
+
+    # def __str__(self):
+    #     return f"Foto de {self.garaje.direccion}"
+
 
 # 5. Pagos 
 class Pago(models.Model):
