@@ -1,5 +1,17 @@
-<app-navbar></app-navbar>
+<ion-app>
 
-<main class="container">
-  <router-outlet></router-outlet>
-</main>
+  <tuplaza-menu></tuplaza-menu>
+
+  <div id="main-content">
+
+    <tuplaza-nav></tuplaza-nav>
+
+    <main class="container">
+      <router-outlet></router-outlet>
+    </main>
+
+    <tuplaza-tab></tuplaza-tab>
+
+  </div>
+
+</ion-app>

@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: tuplaza-mysql-local
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tuplaza
+      MYSQL_USER: tuplaza
+      MYSQL_PASSWORD: tuplazapass
+    volumes:
+      - mysql_data_local:/var/lib/mysql
+    ports:
+      - "3307:3306" # acceso desde tu PC
+    networks:
+      - tuplaza-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: tuplaza-phpmyadmin-local
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "8080:80"
+    networks:
+      - tuplaza-network
+
+volumes:
+  mysql_data_local:
+
+networks:
+  tuplaza-network:
+    name: tuplaza-network

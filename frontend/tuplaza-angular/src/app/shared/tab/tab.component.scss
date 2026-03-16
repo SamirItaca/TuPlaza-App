@@ -1,0 +1,18 @@
+/* Barra de tabs: fondo blanco + shadow */
+.custom-tab-bar {
+  --background: #ffffff;
+  box-shadow: 0px -2px 8px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 24px 24px 0px 0px;
+}
+
+/* Iconos y texto por defecto */
+.custom-tab-button {
+  --color: #000000; /* color de iconos y texto normal */
+  --color-selected: #9C4040; /* color cuando la pestaña está activa */
+  --ripple-color: rgba(156, 64, 64, 0.2); /* opcional: efecto ripple */
+
+  /* Hover: cambiar icono y texto al mismo color que seleccionado */
+  &:hover {
+    --color: #9C4040;
+  }
+}
