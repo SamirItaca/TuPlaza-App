@@ -27,6 +27,8 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+
 
 # 1. El router genera automáticamente las URLs (CRUD completo)
 router = DefaultRouter()
@@ -47,6 +49,8 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/registro/', RegistroView.as_view(), name='registro'),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]
 
 # 3. Configuración para ver las fotos en el navegador durante el desarrollo

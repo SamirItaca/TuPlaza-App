@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'api',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -140,9 +141,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # definir que la autenticación sea por JWT
 REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly', 
     ),
@@ -153,4 +157,24 @@ from datetime import timedelta
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'TuPlaza API - Documentación',
+    'DESCRIPTION': 'API para la gestión de alquiler de garajes del TFG',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # Esto añade el botón de candado/Authorize para JWT
+    'COMPONENT_SPLIT_PATCH': True,
+    'SECURITY': [{'jwt': []}],
+    'APPEND_COMPONENTS': {
+        'securitySchemes': {
+            'jwt': {
+                'type': 'http',
+                'scheme': 'bearer',
+                'bearerFormat': 'JWT',
+            }
+        }
+    },
 }

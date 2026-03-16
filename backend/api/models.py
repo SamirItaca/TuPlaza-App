@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from PIL import Image
-import io
+import io,os
 from django.core.files.base import ContentFile
 
 # 1. Usuarios 
