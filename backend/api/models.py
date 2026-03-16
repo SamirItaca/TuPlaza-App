@@ -107,3 +107,18 @@ class Resena(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     puntuacion = models.IntegerField()
     comentario = models.TextField()
+
+
+class Favorito(models.Model):
+    usuario = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='favoritos')
+    garaje = models.ForeignKey('Garaje', on_delete=models.CASCADE, related_name='favoritos_usuarios')
+    fecha_agregado = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # Esto evita que un usuario guarde el mismo garaje dos veces
+        unique_together = ('usuario', 'garaje')
+        verbose_name = 'Favorito'
+        verbose_name_plural = 'Favoritos'
+
+    def __str__(self):
+        return f"{self.usuario.username} - {self.garaje.nombre}"

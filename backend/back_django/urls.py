@@ -21,7 +21,7 @@ from django.conf import settings # Importante para las imágenes
 from django.conf.urls.static import static # Importante para las imágenes
 from api.views import (
     UsuarioViewSet, GarajeViewSet, ReservaViewSet, 
-    PagoViewSet, ResenaViewSet, FotoGarajeViewSet, RegistroView
+    PagoViewSet, ResenaViewSet, FotoGarajeViewSet, RegistroView, FavoritoViewSet
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -38,6 +38,7 @@ router.register(r'reservas', ReservaViewSet)
 router.register(r'pagos', PagoViewSet)
 router.register(r'resenas', ResenaViewSet)
 router.register(r'fotos', FotoGarajeViewSet)
+router.register(r'favoritos', FavoritoViewSet, basename='favorito')
 
 # 2. Definición de rutas principales
 urlpatterns = [
@@ -51,6 +52,7 @@ urlpatterns = [
     path('api/registro/', RegistroView.as_view(), name='registro'),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('', include(router.urls)),
 ]
 
 # 3. Configuración para ver las fotos en el navegador durante el desarrollo

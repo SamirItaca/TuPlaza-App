@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Usuario, Garaje, Reserva, Pago, Resena, FotoGaraje
+from .models import Usuario, Garaje, Reserva, Pago, Resena, FotoGaraje, Favorito
 from django.contrib.auth.models import User
 
 class UsuarioSerializer(serializers.ModelSerializer):
@@ -69,3 +69,19 @@ class UsuarioPerfilSerializer(serializers.ModelSerializer):
     class Meta:
         model = User # O tu modelo Usuario si lo vinculamos
         fields = ['id', 'username', 'email']
+
+
+class FavoritoSerializer(serializers.ModelSerializer):
+    # El usuario se asignará automáticamente en la vista, no lo pedimos en el JSON
+    usuario = serializers.ReadOnlyField(source='usuario.username')
+
+    class Meta:
+        model = Favorito
+        fields = ['id', 'usuario', 'garaje', 'fecha_agregado']
+
+    def validate(self, data):
+        # Validación extra: ¿Ya existe este favorito para este usuario?
+        user = self.context['request'].user
+        if Favorito.objects.filter(usuario=user, garaje=data['garaje']).exists():
+            raise serializers.ValidationError("Este garaje ya está en tus favoritos.")
+        return data
