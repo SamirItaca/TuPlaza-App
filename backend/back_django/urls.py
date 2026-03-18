@@ -5,7 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from api.views import (
     UsuarioViewSet, GarajeViewSet, ReservaViewSet, 
-    PagoViewSet, ResenaViewSet, FotoGarajeViewSet, RegistroView, FavoritoViewSet
+    PagoViewSet, ResenaViewSet, FotoGarajeViewSet, RegistroView, FavoritoViewSet, NotificacionViewSet
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -21,6 +21,7 @@ router.register(r'pagos', PagoViewSet, basename='pago')
 router.register(r'resenas', ResenaViewSet, basename='resena')
 router.register(r'fotos', FotoGarajeViewSet, basename='foto')
 router.register(r'favoritos', FavoritoViewSet, basename='favorito')
+router.register(r'notificaciones', NotificacionViewSet, basename='notificacion')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

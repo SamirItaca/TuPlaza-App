@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Usuario, Garaje, Reserva, FotoGaraje, Pago, Resena
+from .models import Usuario, Garaje, Reserva, FotoGaraje, Pago, Resena, Notificacion
 
 # Registro sencillo para modelos secundarios
 admin.site.register(Usuario)
@@ -21,4 +21,8 @@ class ReservaAdmin(admin.ModelAdmin):
     list_editable = ('estado',) # Permite cambiar el estado desde la lista
 
     readonly_fields = ('precio_total',)
-# Register your models here.
+
+@admin.register(Notificacion)
+class NotificacionAdmin(admin.ModelAdmin):
+    list_display = ('usuario', 'tipo', 'leida', 'fecha_creacion')
+    list_filter = ('tipo', 'leida')

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Usuario, Garaje, Reserva, Pago, Resena, FotoGaraje, Favorito
+from .models import Usuario, Garaje, Reserva, Pago, Resena, FotoGaraje, Favorito, Notificacion
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 from django.core.exceptions import ValidationError
@@ -118,3 +118,9 @@ class FavoritoSerializer(serializers.ModelSerializer):
         if Favorito.objects.filter(usuario=user, garaje=data['garaje']).exists():
             raise serializers.ValidationError("Este garaje ya está en tus favoritos.")
         return data
+
+
+class NotificacionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notificacion
+        fields = ['id', 'titulo', 'mensaje', 'tipo', 'leida', 'fecha_creacion', 'reserva']

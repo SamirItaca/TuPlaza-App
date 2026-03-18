@@ -177,3 +177,42 @@ class Favorito(models.Model):
 
     def __str__(self):
         return f"{self.usuario.nombre} - {self.garaje.direccion}"
+    
+# 8. notificaciones
+
+class Notificacion(models.Model):
+    #  tipos de avisos posibles
+    TIPOS_AVISO = (
+        ('NUEVA_RESERVA', 'Nueva solicitud de reserva'),
+        ('RESERVA_ACEPTADA', 'Tu reserva ha sido aceptada'),
+        ('RESERVA_RECHAZADA', 'Tu reserva ha sido rechazada'),
+        ('MENSAJE_CHAT', 'Tienes un nuevo mensaje'), # Por si añades chat luego
+    )
+
+    # El destinatario de la notificación
+    usuario = models.ForeignKey(
+        'Usuario', 
+        on_delete=models.CASCADE, 
+        related_name='notificaciones'
+    )
+    
+    # Relación con la reserva para que el usuario pueda ir directo a verla
+    reserva = models.ForeignKey(
+        'Reserva', 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True,
+        related_name='notificaciones_reserva'
+    )
+
+    titulo = models.CharField(max_length=100)
+    mensaje = models.TextField()
+    tipo = models.CharField(max_length=20, choices=TIPOS_AVISO)
+    leida = models.BooleanField(default=False)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-fecha_creacion'] # Las más nuevas primero
+
+    def __str__(self):
+        return f"{self.tipo} - {self.usuario.user.username}"
