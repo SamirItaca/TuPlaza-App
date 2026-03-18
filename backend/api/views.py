@@ -113,6 +113,7 @@ class ResenaViewSet(viewsets.ModelViewSet):
         reserva.save() # Esto disparará la Signal de "Reserva Rechazada"
         return Response({'status': 'reserva rechazada'})
     
+    
     @action(detail=False, methods=['get'])
     def recibidas(self, request):
         """
