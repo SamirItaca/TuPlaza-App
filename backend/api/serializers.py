@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Usuario, Garaje, Reserva, Pago, Resena, FotoGaraje, Favorito
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
+from django.core.exceptions import ValidationError
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,6 +13,16 @@ class ReservaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reserva
         fields = '__all__'
+        read_only_fields = ['precio_total', 'usuario']
+
+    def validate(self, data):
+        # Creamos una instancia temporal para ejecutar el método clean() del modelo
+        instance = Reserva(**data)
+        try:
+            instance.clean()
+        except ValidationError as e:
+            raise serializers.ValidationError(e.message_dict if hasattr(e, 'message_dict') else e.messages)
+        return data
 
 
 class PagoSerializer(serializers.ModelSerializer):
@@ -41,30 +52,31 @@ class GarajeSerializer(serializers.ModelSerializer):
         model = Garaje
         fields = [
             'id', 'descripcion', 'precio', 'disponible', 
-            'propietario', 'propietario_detalle', 'fotos', 'resenas'
+            'propietario', 'propietario_detalle', 'fotos', 'resenas','activo'
         ]
 
 
 class RegistroSerializer(serializers.ModelSerializer):
-
-    """
-    Maneja la creación de usuarios encriptando la contraseña 
-    mediante el método create_user de Django.
-    """
-
     email = serializers.EmailField(
         required=True,
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
-    # La contraseña solo se envía (write), nunca se devuelve en el JSON (read)
     password = serializers.CharField(write_only=True)
+    
+    # Añadimos los campos que necesita tu modelo 'Usuario'
+    telefono = serializers.CharField(write_only=True, required=False)
+    tipo_usuario = serializers.CharField(write_only=True, default='Arrendatario')
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'first_name', 'last_name']
+        fields = ['username', 'email', 'password', 'first_name', 'last_name', 'telefono', 'tipo_usuario']
 
     def create(self, validated_data):
-        # El método create_user se encarga de hashear la contraseña
+       
+        telefono = validated_data.pop('telefono', '')
+        tipo_usuario = validated_data.pop('tipo_usuario', 'Arrendatario')
+
+        # Creamr el User de Django (Autenticación)
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
@@ -72,12 +84,23 @@ class RegistroSerializer(serializers.ModelSerializer):
             first_name=validated_data.get('first_name', ''),
             last_name=validated_data.get('last_name', '')
         )
+
+        # CREAMOS EL PERFIL (Usuario) vinculado al User recién creado
+    
+        Usuario.objects.create(
+            user=user,
+            nombre=f"{user.first_name} {user.last_name}".strip() or user.username,
+            email=user.email,
+            telefono=telefono,
+            tipo_usuario=tipo_usuario
+        )
+
         return user
 
-# Este lo usaremos luego para mostrar datos del perfil
+# para mostrar datos del perfil
 class UsuarioPerfilSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User # O tu modelo Usuario si lo vinculamos
+        model = User 
         fields = ['id', 'username', 'email']
 
 

@@ -6,19 +6,79 @@ from django.contrib.auth.models import User
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.throttling import ScopedRateThrottle
 
+# 1. Usuarios: Cada uno gestiona SOLO su perfil
 class UsuarioViewSet(viewsets.ModelViewSet):
-    queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
+    permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        # Evitamos que un usuario vea los perfiles de otros
+        return Usuario.objects.filter(user=self.request.user)
+
+# 2. Garajes: Filtrado para el público
 class GarajeViewSet(viewsets.ModelViewSet):
-    queryset = Garaje.objects.all()
     serializer_class = GarajeSerializer
+    
+    def get_queryset(self):
+        return Garaje.objects.filter(activo=True, disponible=True)
 
+# 3. Reservas: Uso de .perfil
 class ReservaViewSet(viewsets.ModelViewSet):
-    queryset = Reserva.objects.all()
     serializer_class = ReservaSerializer
+    permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        # Usamos .perfil porque Reserva apunta a tu modelo Usuario
+        return Reserva.objects.filter(usuario=self.request.user.perfil)
+
+    def perform_create(self, serializer):
+        serializer.save(usuario=self.request.user.perfil)
+
+# 4. Registro: Con protección de tasa (Throttling)
+class RegistroView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = [AllowAny] 
+    serializer_class = RegistroSerializer
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'registros'
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        return Response({
+            "message": "Usuario creado correctamente",
+            "user": response.data
+        }, status=status.HTTP_201_CREATED)
+
+# 5. Favoritos: Corregido el acceso al perfil
+class FavoritoViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated] 
+    authentication_classes = [JWTAuthentication]
+    serializer_class = FavoritoSerializer
+
+    def get_queryset(self):
+        # IMPORTANTE: Filtrar por el perfil relacionado, no por el User de Django
+        return Favorito.objects.filter(usuario=self.request.user.perfil)
+
+    def perform_create(self, serializer):
+        # IMPORTANTE: Guardar vinculando al perfil
+        serializer.save(usuario=self.request.user.perfil)
+
+    @action(detail=False, methods=['delete'], url_path='borrar-por-garaje/(?P<garaje_id>[^/.]+)')
+    def borrar_por_garaje(self, request, garaje_id=None):
+        # Buscamos usando el perfil del usuario logueado
+        favorito = Favorito.objects.filter(
+            usuario=request.user.perfil, 
+            garaje_id=garaje_id
+        ).first()
+
+        if favorito:
+            favorito.delete()
+            return Response({'detail': 'Favorito eliminado.'}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'detail': 'No encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+
+# Viewsets simples (puedes añadirles IsAuthenticated si quieres)
 class PagoViewSet(viewsets.ModelViewSet):
     queryset = Pago.objects.all()
     serializer_class = PagoSerializer
@@ -30,45 +90,3 @@ class ResenaViewSet(viewsets.ModelViewSet):
 class FotoGarajeViewSet(viewsets.ModelViewSet):
     queryset = FotoGaraje.objects.all()
     serializer_class = FotoGarajeSerializer
-
-class RegistroView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    # Importante: AllowAny permite que alguien que NO tiene cuenta pueda entrar a crear una
-    permission_classes = [AllowAny] 
-    serializer_class = RegistroSerializer
-
-   
-    def create(self, request, *args, **kwargs):
-        response = super().create(request, *args, **kwargs)
-        return Response({
-            "message": "Usuario creado correctamente",
-            "user": response.data
-        }, status=status.HTTP_201_CREATED)
-
-class FavoritoViewSet(viewsets.ModelViewSet):
-    # Esto obliga a que el Interceptor de Angular envíe el Token
-    permission_classes = [IsAuthenticated] 
-    authentication_classes = [JWTAuthentication] # Opcional si está en settings.py
-    serializer_class = FavoritoSerializer
-
-    def get_queryset(self):
-        # El interceptor permite que 'self.request.user' no sea AnonymousUser
-        return Favorito.objects.filter(usuario=self.request.user)
-
-    def perform_create(self, serializer):
-        serializer.save(usuario=self.request.user)
-
-    @action(detail=False, methods=['delete'], url_path='borrar-por-garaje/(?P<garaje_id>[^/.]+)')
-    def borrar_por_garaje(self, request, garaje_id=None):
-        usuario = request.user
-        
-        # Buscamos el favorito que coincida con el usuario y el ID del garaje
-        favorito = Favorito.objects.filter(usuario=usuario, garaje_id=garaje_id).first()
-
-        if favorito:
-            favorito.delete()
-            return Response({'detail': 'Favorito eliminado correctamente.'}, status=status.HTTP_204_NO_CONTENT)
-        else:
-            return Response({'detail': 'No se encontró el favorito para este garaje.'}, status=status.HTTP_404_NOT_FOUND)
-        
-

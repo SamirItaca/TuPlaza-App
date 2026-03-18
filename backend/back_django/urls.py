@@ -14,12 +14,12 @@ from rest_framework_simplejwt.views import (
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 router = DefaultRouter()
-router.register(r'usuarios', UsuarioViewSet)
-router.register(r'garajes', GarajeViewSet)
-router.register(r'reservas', ReservaViewSet)
-router.register(r'pagos', PagoViewSet)
-router.register(r'resenas', ResenaViewSet)
-router.register(r'fotos', FotoGarajeViewSet)
+router.register(r'usuarios', UsuarioViewSet, basename='usuario')
+router.register(r'garajes', GarajeViewSet, basename='garaje')
+router.register(r'reservas', ReservaViewSet, basename='reserva')
+router.register(r'pagos', PagoViewSet, basename='pago')
+router.register(r'resenas', ResenaViewSet, basename='resena')
+router.register(r'fotos', FotoGarajeViewSet, basename='foto')
 router.register(r'favoritos', FavoritoViewSet, basename='favorito')
 
 urlpatterns = [
