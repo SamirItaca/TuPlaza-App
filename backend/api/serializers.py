@@ -72,11 +72,12 @@ class RegistroSerializer(serializers.ModelSerializer):
         fields = ['username', 'email', 'password', 'first_name', 'last_name', 'telefono', 'tipo_usuario']
 
     def create(self, validated_data):
-       
+        # 1. Extraemos los campos extra
         telefono = validated_data.pop('telefono', '')
         tipo_usuario = validated_data.pop('tipo_usuario', 'Arrendatario')
 
-        # Creamr el User de Django (Autenticación)
+        # 2. Creamos el User de Django
+        # (Esto dispara la SIGNAL automáticamente y crea el perfil vacío)
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
@@ -85,15 +86,14 @@ class RegistroSerializer(serializers.ModelSerializer):
             last_name=validated_data.get('last_name', '')
         )
 
-        # CREAMOS EL PERFIL (Usuario) vinculado al User recién creado
-    
-        Usuario.objects.create(
-            user=user,
-            nombre=f"{user.first_name} {user.last_name}".strip() or user.username,
-            email=user.email,
-            telefono=telefono,
-            tipo_usuario=tipo_usuario
-        )
+        # 3. ACTUALIZAMOS EL PERFIL que la Signal ya ha creado
+        # En lugar de .create(), usamos .filter().update() o accedemos a user.perfil
+        perfil = user.perfil # Gracias a la Signal, esto ya existe
+        perfil.nombre = f"{user.first_name} {user.last_name}".strip() or user.username
+        perfil.email = user.email
+        perfil.telefono = telefono
+        perfil.tipo_usuario = tipo_usuario
+        perfil.save()
 
         return user
 
