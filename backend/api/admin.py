@@ -20,4 +20,5 @@ class ReservaAdmin(admin.ModelAdmin):
     list_display = ('id', 'usuario', 'garaje', 'fecha_inicio', 'estado')
     list_editable = ('estado',) # Permite cambiar el estado desde la lista
 
+    readonly_fields = ('precio_total',)
 # Register your models here.

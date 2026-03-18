@@ -107,6 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
+    "http://127.0.0.1:4200",
 ]
 
 
@@ -150,6 +151,15 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly', 
     ),
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle', # Para usuarios no logueados
+        'rest_framework.throttling.UserRateThrottle', # Para usuarios logueados
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day',   # Un extraño solo puede hacer 100 peticiones al día
+        'user': '1000/day',  # Un usuario real tiene más margen: 1000 al día
+        'registros': '5/hour', # Especial para creación de cuentas
+    }
 }
 
 # Configuración de SimpleJWT (para definir duración del token)

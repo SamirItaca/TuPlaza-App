@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Iniciar Sesión - TuPlaZa</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="login-container">
+    <ion-item lines="full">
+      <ion-label position="floating">Usuario</ion-label>
+      <ion-input [(ngModel)]="credentials.username" type="text" placeholder="Tu nombre de usuario"></ion-input>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input [(ngModel)]="credentials.password" type="password" placeholder="********"></ion-input>
+    </ion-item>
+
+    <div class="ion-margin-top">
+      <ion-button expand="block" (click)="onLogin()" color="success">
+        Entrar
+      </ion-button>
+    </div>
+
+    <ion-button expand="block" fill="clear" color="medium" size="small">
+      ¿No tienes cuenta? Regístrate
+    </ion-button>
+  </div>
+</ion-content>

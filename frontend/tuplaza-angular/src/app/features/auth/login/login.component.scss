@@ -1,0 +1,50 @@
+// Contenedor principal para centrar el formulario
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh; // Para que aparezca centrado verticalmente
+  max-width: 450px; // Limita el ancho en pantallas de escritorio
+  margin: 0 auto;   // Centra el bloque horizontalmente
+  padding: 20px;
+  background: var(--ion-background-color, #ffffff);
+  border-radius: 15px;
+}
+
+// Estilo para los items de entrada
+ion-item {
+  width: 100%;
+  margin-bottom: 15px;
+  --border-radius: 8px;
+  --padding-start: 10px;
+  
+  // Cambia el color del borde al enfocar
+  &.item-has-focus {
+    --highlight-background: var(--ion-color-success);
+  }
+}
+
+// Estilo del botón principal
+ion-button {
+  margin-top: 25px;
+  width: 100%;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  --border-radius: 10px;
+  height: 50px; // Un poco más alto para facilitar el toque en móvil
+}
+
+// Botón de "registrarse" (el que es solo texto)
+ion-button[fill="clear"] {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  --color: var(--ion-color-medium);
+}
+
+// Ajuste para el encabezado (opcional si quieres el color personalizado que vimos antes)
+ion-toolbar {
+  --background: #9C4040; // El rojo que definimos para los garajes
+  --color: white;
+}
