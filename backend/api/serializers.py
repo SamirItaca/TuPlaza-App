@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Usuario, Garaje, Reserva, Pago, Resena, FotoGaraje, Favorito
 from django.contrib.auth.models import User
+from rest_framework.validators import UniqueValidator
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,18 +52,27 @@ class RegistroSerializer(serializers.ModelSerializer):
     mediante el método create_user de Django.
     """
 
+    email = serializers.EmailField(
+        required=True,
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
+    # La contraseña solo se envía (write), nunca se devuelve en el JSON (read)
     password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password'] # Campos base de Django
+        fields = ['username', 'email', 'password', 'first_name', 'last_name']
 
     def create(self, validated_data):
-        return User.objects.create_user(
+        # El método create_user se encarga de hashear la contraseña
+        user = User.objects.create_user(
             username=validated_data['username'],
-            email=validated_data.get('email', ''),
-            password=validated_data['password']
+            email=validated_data['email'],
+            password=validated_data['password'],
+            first_name=validated_data.get('first_name', ''),
+            last_name=validated_data.get('last_name', '')
         )
+        return user
 
 # Este lo usaremos luego para mostrar datos del perfil
 class UsuarioPerfilSerializer(serializers.ModelSerializer):

@@ -1,10 +1,11 @@
 from rest_framework import viewsets, generics, permissions, status
 from .models import Usuario, Garaje, Reserva, Pago , Resena, FotoGaraje, Favorito
 from .serializers import UsuarioSerializer, GarajeSerializer, ReservaSerializer, PagoSerializer, ResenaSerializer, FotoGarajeSerializer, RegistroSerializer, FavoritoSerializer
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
@@ -36,16 +37,25 @@ class RegistroView(generics.CreateAPIView):
     permission_classes = [AllowAny] 
     serializer_class = RegistroSerializer
 
+   
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        return Response({
+            "message": "Usuario creado correctamente",
+            "user": response.data
+        }, status=status.HTTP_201_CREATED)
+
 class FavoritoViewSet(viewsets.ModelViewSet):
+    # Esto obliga a que el Interceptor de Angular envíe el Token
+    permission_classes = [IsAuthenticated] 
+    authentication_classes = [JWTAuthentication] # Opcional si está en settings.py
     serializer_class = FavoritoSerializer
-    permission_classes = [permissions.IsAuthenticated] # Solo usuarios logueados
 
     def get_queryset(self):
-        # Importante: Un usuario SOLO ve sus propios favoritos, no los de todos
+        # El interceptor permite que 'self.request.user' no sea AnonymousUser
         return Favorito.objects.filter(usuario=self.request.user)
 
     def perform_create(self, serializer):
-        # Al guardar, le decimos a Django que el usuario es el que está logueado
         serializer.save(usuario=self.request.user)
 
     @action(detail=False, methods=['delete'], url_path='borrar-por-garaje/(?P<garaje_id>[^/.]+)')
@@ -60,3 +70,5 @@ class FavoritoViewSet(viewsets.ModelViewSet):
             return Response({'detail': 'Favorito eliminado correctamente.'}, status=status.HTTP_204_NO_CONTENT)
         else:
             return Response({'detail': 'No se encontró el favorito para este garaje.'}, status=status.HTTP_404_NOT_FOUND)
+        
+
