@@ -7,6 +7,7 @@ from django.utils import timezone
 from PIL import Image
 import io, os
 from datetime import timedelta
+from decimal import Decimal
 
 # 1. Usuarios (Perfil extendido)
 class Usuario(models.Model):
@@ -17,8 +18,6 @@ class Usuario(models.Model):
     )
     nombre = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
-    # Nota: El password ya lo maneja settings.AUTH_USER_MODEL, 
-    # pero si lo necesitas para el registro manual está bien.
     telefono = models.CharField(max_length=20, blank=True)
     tipo_usuario = models.CharField(max_length=50) # Arrendador/Arrendatario
     verificado = models.BooleanField(default=False)
@@ -33,7 +32,7 @@ class Garaje(models.Model):
     precio = models.DecimalField(
         max_digits=8, 
         decimal_places=2, 
-        validators=[MinValueValidator(0.01)] 
+        validators=[MinValueValidator(Decimal('0.01'))] 
     )
     disponible = models.BooleanField(default=True)
     activo = models.BooleanField(default=True)
@@ -45,11 +44,10 @@ class Garaje(models.Model):
 # 3. Reservas 
 class Reserva(models.Model):
     garaje = models.ForeignKey(Garaje, on_delete=models.CASCADE)
-    # Corregido: Apuntamos al modelo Usuario que definiste arriba
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     fecha_inicio = models.DateTimeField()
     fecha_fin = models.DateTimeField()
-    precio_total = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
+    precio_total = models.DecimalField(max_digits=10, decimal_places=2, editable=False, default=0.00)
     estado = models.CharField(
         max_length=20, 
         choices=[
@@ -61,53 +59,54 @@ class Reserva(models.Model):
     )
 
     def clean(self):
-        super().clean()
-        
         if not self.fecha_inicio or not self.fecha_fin:
             return
 
-        # 1. Validación de orden de fechas
         if self.fecha_fin <= self.fecha_inicio:
             raise ValidationError("La fecha de fin debe ser posterior a la de inicio.")
 
-        # 2. Reserva mínima de 24 horas (usando segundos para precisión)
         duracion = self.fecha_fin - self.fecha_inicio
-        if duracion.total_seconds() < 86400: # 86.400 seg = 24h
+        if duracion.total_seconds() < 86400:
             raise ValidationError("La reserva mínima debe ser de al menos 24 horas.")
 
-        # 3. No reservar en el pasado
-        if self.fecha_inicio < timezone.now():
+        if not self.pk and self.fecha_inicio < timezone.now():
             raise ValidationError("La reserva no puede empezar en una fecha pasada.")
+        
+        if hasattr(self, 'garaje') and hasattr(self, 'usuario'):
+            if self.garaje.propietario == self.usuario:
+                raise ValidationError("No puedes reservar tu propio garaje.")
 
-        # 4. Solapamientos 
-        existe_solapamiento = Reserva.objects.filter(
+        # Solapamientos
+        qs = Reserva.objects.filter(
             garaje=self.garaje,
+            estado='confirmada', # Solo solapa si está confirmada
             fecha_inicio__lt=self.fecha_fin,
             fecha_fin__gt=self.fecha_inicio
-        ).exclude(pk=self.pk).exists()
-
-        if existe_solapamiento:
-            raise ValidationError("Este garaje ya está reservado para esas fechas.")
+        )
+        if self.pk:
+            qs = qs.exclude(pk=self.pk)
+        
+        if qs.exists():
+            raise ValidationError("Este garaje ya está reservado en esas fechas.")
 
     def save(self, *args, **kwargs):
-        # Cálculo de días (siempre mínimo 1 por la validación del clean)
+        # 1. Calcular la diferencia de tiempo
         duracion = self.fecha_fin - self.fecha_inicio
         segundos_totales = duracion.total_seconds()
-        segundos_dia = 86400
-        
-        dias_completos = int(segundos_totales // segundos_dia)
-    
-        # Lógica: si se pasa un segundo del día, cobramos otro día
-        if segundos_totales % segundos_dia > 0:
-            dias_a_cobrar = dias_completos + 1
-        else:
-            dias_a_cobrar = dias_completos
+        segundos_en_un_dia = 86400  # 24h * 60m * 60s
 
+        # 2. Lógica de cobro: 
+        # Dividimos el total de segundos por los segundos de un día.
+        # Usamos math.ceil para que cualquier fracción de día extra cuente como un día más.
+        import math
         from decimal import Decimal
+        
+        dias_a_cobrar = math.ceil(segundos_totales / segundos_en_un_dia)
 
-        self.precio_total = Decimal(dias_a_cobrar) * Decimal(self.garaje.precio)   
-         
-        self.full_clean()
+        # 3. Asignar el precio total
+        self.precio_total = Decimal(dias_a_cobrar) * self.garaje.precio
+
+        # 4. Guardar
         super().save(*args, **kwargs)
 
 # 4. Fotos Garaje 

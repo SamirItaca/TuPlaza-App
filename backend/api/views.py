@@ -30,11 +30,44 @@ class ReservaViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        # Usamos .perfil porque Reserva apunta a tu modelo Usuario
+        # Reservas hechas por mí como cliente
         return Reserva.objects.filter(usuario=self.request.user.perfil)
 
     def perform_create(self, serializer):
+        # Forzamos que el usuario de la reserva sea el que está logueado
         serializer.save(usuario=self.request.user.perfil)
+
+    @action(detail=True, methods=['post'])
+    def aceptar(self, request, pk=None):
+        reserva = self.get_object()
+        
+        # 1. Seguridad: ¿Eres el dueño?
+        if reserva.garaje.propietario != request.user.perfil:
+            return Response({'error': 'No tienes permiso'}, status=status.HTTP_403_FORBIDDEN)
+        
+        # 2. Validación extra: ¿Sigue el garaje libre en esas fechas?
+        # (Llamamos al método clean del modelo que ya tiene la lógica de solapamiento)
+        try:
+            reserva.estado = 'confirmada'
+            reserva.full_clean() # Esto dispara el método clean() del modelo
+            reserva.save()
+            return Response({'status': 'reserva confirmada'})
+        except ValidationError as e:
+            return Response({'error': e.messages}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['post'])
+    def rechazar(self, request, pk=None):
+        reserva = self.get_object()
+        if reserva.garaje.propietario != request.user.perfil:
+            return Response({'error': 'No eres el dueño'}, status=status.HTTP_403_FORBIDDEN)
+        reserva.estado = 'cancelada'
+        reserva.save()
+        return Response({'status': 'reserva rechazada'})
+
+class ResenaViewSet(viewsets.ModelViewSet):
+    queryset = Resena.objects.all()
+    serializer_class = ResenaSerializer
+    permission_classes = [IsAuthenticated]
 
 # 4. Registro: Con protección de tasa (Throttling)
 class RegistroView(generics.CreateAPIView):
@@ -82,64 +115,6 @@ class FavoritoViewSet(viewsets.ModelViewSet):
 class PagoViewSet(viewsets.ModelViewSet):
     queryset = Pago.objects.all()
     serializer_class = PagoSerializer
-
-class ResenaViewSet(viewsets.ModelViewSet):
-    queryset = Resena.objects.all()
-    serializer_class = ResenaSerializer
-
-    @action(detail=True, methods=['post'])
-    def aceptar(self, request, pk=None):
-        reserva = self.get_object()
-        
-        # SEGURIDAD: ¿Es el usuario actual el dueño del garaje?
-        if reserva.garaje.propietario != request.user.perfil:
-            return Response({'error': 'No tienes permiso para aceptar esta reserva'}, 
-                            status=status.HTTP_403_FORBIDDEN)
-        
-        reserva.estado = 'confirmada'
-        reserva.save() # Esto disparará la Signal de "Reserva Aceptada" automáticamente
-        return Response({'status': 'reserva confirmada'})
-
-    @action(detail=True, methods=['post'])
-    def rechazar(self, request, pk=None):
-        reserva = self.get_object()
-        
-        # SEGURIDAD: ¿Es el usuario el dueño?
-        if reserva.garaje.propietario != request.user.perfil:
-            return Response({'error': 'No tienes permiso para rechazar esta reserva'}, 
-                            status=status.HTTP_403_FORBIDDEN)
-        
-        reserva.estado = 'cancelada'
-        reserva.save() # Esto disparará la Signal de "Reserva Rechazada"
-        return Response({'status': 'reserva rechazada'})
-    
-    
-    @action(detail=False, methods=['get'])
-    def recibidas(self, request):
-        """
-        Devuelve las reservas que LE HAN HECHO AL USUARIO OROS USUARIOS.
-        """
-        reservas = Reserva.objects.filter(garaje__propietario=request.user.perfil)
-        serializer = self.get_serializer(reservas, many=True)
-        return Response(serializer.data)
-    
-    @action(detail=False, methods=['get'])
-    def mis_reservas(self, request):
-        """
-        Devuelve las reservas que EL USUARIO  ha realizado 
-       
-        """
-        # Filtramos por el perfil del usuario logueado
-        reservas = Reserva.objects.filter(usuario=request.user.perfil).order_by('-fecha_inicio')
-        
-        # Usamos el serializador para devolver los datos
-        page = self.paginate_queryset(reservas)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(reservas, many=True)
-        return Response(serializer.data)
 
 class FotoGarajeViewSet(viewsets.ModelViewSet):
     queryset = FotoGaraje.objects.all()

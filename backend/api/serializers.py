@@ -1,3 +1,5 @@
+from datetime import timezone
+
 from rest_framework import serializers
 from .models import Usuario, Garaje, Reserva, Pago, Resena, FotoGaraje, Favorito, Notificacion
 from django.contrib.auth.models import User
@@ -10,21 +12,63 @@ class UsuarioSerializer(serializers.ModelSerializer):
         fields = ['id', 'nombre', 'email', 'telefono', 'verificado'] 
 
 class ReservaSerializer(serializers.ModelSerializer):
+    garaje_direccion = serializers.ReadOnlyField(source='garaje.direccion')
+    cliente_username = serializers.ReadOnlyField(source='usuario.user.username')
+
     class Meta:
         model = Reserva
-        fields = '__all__'
-        read_only_fields = ['precio_total', 'usuario']
+        fields = [
+            'id', 'garaje', 'usuario', 'fecha_inicio', 'fecha_fin', 
+            'estado', 'precio_total', 'garaje_direccion', 'cliente_username'
+        ]
+        read_only_fields = ['precio_total', 'usuario', 'estado']
 
     def validate(self, data):
-        # Creamos una instancia temporal para ejecutar el método clean() del modelo
-        instance = Reserva(**data)
-        try:
-            instance.clean()
-        except ValidationError as e:
-            raise serializers.ValidationError(e.message_dict if hasattr(e, 'message_dict') else e.messages)
+        request = self.context.get('request')
+        
+        # 0. Primero comprobamos que hay una sesión activa
+        if not request or not request.user.is_authenticated or not hasattr(request.user, 'perfil'):
+            raise serializers.ValidationError({"auth": "Debes estar autenticado y tener un perfil para reservar."})
+
+        user_perfil = request.user.perfil
+        garaje = data.get('garaje')
+        f_inicio = data.get('fecha_inicio')
+        f_fin = data.get('fecha_fin')
+
+        # 1. ¿EL GARAJE EXISTE Y ESTÁ ACTIVO?
+        if not garaje.activo or not garaje.disponible:
+            raise serializers.ValidationError({"garaje": "Este garaje no está aceptando reservas actualmente."})
+
+        # 2. ¿ERES EL DUEÑO? (Seguridad Blindada)
+        if garaje.propietario == user_perfil:
+            raise serializers.ValidationError({"garaje": "No puedes reservar tu propio garaje."})
+
+        # 3. ¿FECHAS EN EL PASADO?
+        # (Asegúrate de que 'timezone' esté importado de 'django.utils')
+        if f_inicio < timezone.now():
+            raise serializers.ValidationError({"fecha_inicio": "La fecha de inicio no puede ser en el pasado."})
+
+        # 4. ORDEN DE FECHAS
+        if f_fin <= f_inicio:
+            raise serializers.ValidationError({"fecha_fin": "La fecha de fin debe ser posterior a la de inicio."})
+
+        # 5. DURACIÓN MÍNIMA (24 horas)
+        duracion = f_fin - f_inicio
+        if duracion.total_seconds() < 86400: 
+            raise serializers.ValidationError({"fecha_fin": "La reserva debe ser de al menos 24 horas."})
+
+        # 6. SOLAPAMIENTO (Overlapping)
+        exists = Reserva.objects.filter(
+            garaje=garaje,
+            estado__in=['pendiente', 'confirmada'],
+            fecha_inicio__lt=f_fin,
+            fecha_fin__gt=f_inicio
+        ).exclude(id=self.instance.id if self.instance else None).exists()
+
+        if exists:
+            raise serializers.ValidationError({"error": "El garaje ya está ocupado o solicitado en esas fechas."})
+
         return data
-
-
 class PagoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pago
@@ -32,6 +76,8 @@ class PagoSerializer(serializers.ModelSerializer):
 
 
 class ResenaSerializer(serializers.ModelSerializer):
+
+    
     class Meta:
         model = Resena
         fields = '__all__'
