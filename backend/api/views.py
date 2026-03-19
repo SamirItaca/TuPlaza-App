@@ -7,6 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.throttling import ScopedRateThrottle
+from django.db.models import Q
 
 # 1. Usuarios: Cada uno gestiona SOLO su perfil
 class UsuarioViewSet(viewsets.ModelViewSet):
@@ -30,40 +31,52 @@ class ReservaViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        # Reservas hechas por mí como cliente
-        return Reserva.objects.filter(usuario=self.request.user.perfil)
+        user = self.request.user
+    
+        # Intentamos obtener el perfil (Usuario) del usuario logueado
+        try:
+            perfil = user.perfil # 'perfil' es el related_name que pusiste en el OneToOneField
+        except AttributeError:
+            return Reserva.objects.none()
 
-    def perform_create(self, serializer):
-        # Forzamos que el usuario de la reserva sea el que está logueado
-        serializer.save(usuario=self.request.user.perfil)
+        # Filtramos: 
+        # 1. Reservas donde el usuario es el que solicita (Arrendatario)
+        # 2. Reservas de garajes que pertenecen al usuario (Arrendador)
+        return Reserva.objects.filter(
+            Q(usuario=perfil) | Q(garaje__propietario=perfil)
+        ).distinct()
 
     @action(detail=True, methods=['post'])
     def aceptar(self, request, pk=None):
         reserva = self.get_object()
-        
-        # 1. Seguridad: ¿Eres el dueño?
-        if reserva.garaje.propietario != request.user.perfil:
-            return Response({'error': 'No tienes permiso'}, status=status.HTTP_403_FORBIDDEN)
-        
-        # 2. Validación extra: ¿Sigue el garaje libre en esas fechas?
-        # (Llamamos al método clean del modelo que ya tiene la lógica de solapamiento)
+    
+    # IMPORTANTE: Comparamos el ID del USER vinculado al perfil del propietario
+    # con el ID del USER que hace la petición (request.user)
+        if reserva.garaje.propietario.user.id != request.user.id:
+            return Response({
+            'error': 'No tienes permiso sobre este garaje',
+            'debug': f"Propietario User ID: {reserva.garaje.propietario.user.id}, Tu ID: {request.user.id}"
+        }, status=status.HTTP_403_FORBIDDEN)
+
         try:
             reserva.estado = 'confirmada'
-            reserva.full_clean() # Esto dispara el método clean() del modelo
             reserva.save()
-            return Response({'status': 'reserva confirmada'})
-        except ValidationError as e:
-            return Response({'error': e.messages}, status=status.HTTP_400_BAD_REQUEST)
+        # ... resto de tu lógica ...
+            return Response({'status': 'Reserva aceptada'})
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['post'])
     def rechazar(self, request, pk=None):
         reserva = self.get_object()
-        if reserva.garaje.propietario != request.user.perfil:
-            return Response({'error': 'No eres el dueño'}, status=status.HTTP_403_FORBIDDEN)
+        
+        if reserva.garaje.propietario != request.user:
+            return Response({'error': 'No tienes permiso sobre este garaje'}, 
+                            status=status.HTTP_403_FORBIDDEN)
+            
         reserva.estado = 'cancelada'
         reserva.save()
         return Response({'status': 'reserva rechazada'})
-
 class ResenaViewSet(viewsets.ModelViewSet):
     queryset = Resena.objects.all()
     serializer_class = ResenaSerializer

@@ -23,6 +23,11 @@ class ReservaSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['precio_total', 'usuario', 'estado']
 
+        def create(self, validated_data):
+        # Asignamos el perfil del usuario logueado automáticamente
+            validated_data['usuario'] = self.context['request'].user.perfil
+            return super().create(validated_data)
+
     def validate(self, data):
         request = self.context.get('request')
         
@@ -30,7 +35,7 @@ class ReservaSerializer(serializers.ModelSerializer):
         if not request or not request.user.is_authenticated or not hasattr(request.user, 'perfil'):
             raise serializers.ValidationError({"auth": "Debes estar autenticado y tener un perfil para reservar."})
 
-        user_perfil = request.user.perfil
+        user_actual = request.user
         garaje = data.get('garaje')
         f_inicio = data.get('fecha_inicio')
         f_fin = data.get('fecha_fin')
@@ -40,7 +45,7 @@ class ReservaSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"garaje": "Este garaje no está aceptando reservas actualmente."})
 
         # 2. ¿ERES EL DUEÑO? (Seguridad Blindada)
-        if garaje.propietario == user_perfil:
+        if garaje.propietario == user_actual:
             raise serializers.ValidationError({"garaje": "No puedes reservar tu propio garaje."})
 
         # 3. ¿FECHAS EN EL PASADO?
