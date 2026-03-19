@@ -1,0 +1,43 @@
+<div class="main-container">
+  <h2 class="title">Mis Notificaciones</h2>
+
+  <div class="grid-container">
+    @for (n of notifService.notificaciones$ | async; track n.id) {
+      
+      <div class="card-notif" 
+           [class.no-leida]="!n.leida" 
+           (click)="marcarLeida(n.id)">
+        
+        <span class="status-available">{{ n.tipo.replace('_', ' ') }}</span>
+        
+        <div class="card-content">
+          <h3 class="notif-title">{{ n.titulo }}</h3>
+          
+          <p class="notif-message">{{ n.mensaje }}</p>
+
+          <div class="notif-date">
+            <span>{{ n.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</span>
+            
+            @if (!n.leida) {
+              <span style="color: #9C4040; font-weight: bold;">● Nueva</span>
+            }
+          </div>
+
+          @if (n.reserva) {
+            <button class="btn-detalles" style="margin-top: 15px;">
+              Ver detalles de reserva
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          }
+        </div>
+      </div>
+
+    } @empty {
+      <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+        <p>No tienes notificaciones pendientes.</p>
+      </div>
+    }
+  </div>
+</div>

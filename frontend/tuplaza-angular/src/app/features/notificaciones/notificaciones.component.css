@@ -1,0 +1,95 @@
+:host {
+  display: block;
+  width: 100%;
+  background-color: #f0f2f5; 
+    min-height: 100vh;
+}
+
+.main-container {
+  padding: 20px;
+  max-width: 900px; /* Reducido para que no se estire tanto en PC */
+  margin: 0 auto;
+}
+
+.grid-container {
+  display: flex;
+  flex-direction: column; /* En notificaciones suele leerse mejor en lista que en rejilla */
+  gap: 16px;
+}
+
+.card-notif {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 18px;
+  /* Sombra más marcada para separar del fondo */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12); 
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  border-left: 5px solid #bdc3c7; /* Color neutro para leídas */
+  position: relative;
+}
+
+/* Estado No Leída: Contraste alto con tu rojo */
+.card-notif.no-leida {
+  border-left: 5px solid #9C4040;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  background-color: #fff;
+}
+
+.card-notif:hover {
+  transform: scale(1.01);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Ajuste de Textos Informativos */
+.notif-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1a1a1a; /* Negro casi puro para máximo contraste */
+  margin-bottom: 8px;
+}
+
+.notif-message {
+  font-size: 1rem;
+  color: #2d3436; /* Gris muy oscuro, muy legible */
+  line-height: 1.5;
+  margin-bottom: 12px;
+  white-space: pre-line;
+  font-weight: 500; /* Un poco más de grosor al texto */
+}
+
+.notif-date {
+  font-size: 0.85rem;
+  color: #2d3436; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+/* Badge de tipo más visible */
+.status-available {
+  background: #f8ecec;
+  color: #9C4040;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+/* Botón con el estilo de tu app */
+.btn-detalles {
+  background: #9C4040;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 600;
+  width: auto; 
+  align-self: flex-start;
+  margin-top: 10px;
+  box-shadow: 0 4px 10px rgba(156, 64, 64, 0.2);
+}

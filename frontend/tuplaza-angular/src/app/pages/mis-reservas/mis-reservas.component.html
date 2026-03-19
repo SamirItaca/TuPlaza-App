@@ -1,0 +1,41 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Solicitudes de mi Garaje</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    @for (reserva of reservas; track reserva.id) {
+      <ion-item>
+        <ion-label>
+          <h2>{{ reserva.garaje_direccion || 'Plaza de Garaje' }}</h2>
+          <p>Solicitado por: <strong>{{ reserva.cliente_username }}</strong></p>
+          <p>Del {{ reserva.fecha_inicio | date:'short' }}</p>
+          <p>Al {{ reserva.fecha_fin | date:'short' }}</p>
+          
+          <ion-badge [color]="reserva.estado === 'pendiente' ? 'warning' : (reserva.estado === 'confirmada' ? 'success' : 'danger')">
+            {{ reserva.estado | uppercase }}
+          </ion-badge>
+        </ion-label>
+
+        @if (reserva.estado === 'pendiente') {
+          <div slot="end">
+            <ion-button fill="clear" color="success" (click)="gestionarReserva(reserva.id, 'aceptar')">
+              <ion-icon name="checkmark-outline"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" color="danger" (click)="gestionarReserva(reserva.id, 'rechazar')">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </div>
+        }
+      </ion-item>
+    } @empty {
+      <div class="ion-text-center ion-padding">
+        <ion-text color="medium">
+          <p>No tienes solicitudes pendientes en este momento.</p>
+        </ion-text>
+      </div>
+    }
+  </ion-list>
+</ion-content>

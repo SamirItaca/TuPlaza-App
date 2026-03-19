@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { NotificacionesComponent } from './features/notificaciones/notificaciones.component';
 
 export const routes: Routes = [
   // 1. Ruta inicial: Redirige al Home (o a Garajes, según prefieras)
@@ -34,5 +35,13 @@ export const routes: Routes = [
     path: 'publicar',
     canActivate: [authGuard],// ruta protegida, si no estas logueado no puedes entrar
     loadChildren: () => import('./features/publicar/publicar.routes').then(m => m.PUBLICAR_ROUTES)
-  }
+  },
+  {
+    path: 'mis-reservas',
+    loadComponent: () => import('./pages/mis-reservas/mis-reservas.component').then(m => m.MisReservasComponent)
+  },
+  { 
+    path: 'notificaciones', 
+    component: NotificacionesComponent 
+  },
 ];
