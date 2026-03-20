@@ -3,19 +3,16 @@ import { authGuard } from './core/guards/auth.guard';
 import { NotificacionesComponent } from './features/notificaciones/notificaciones.component';
 
 export const routes: Routes = [
-  // 1. Ruta inicial: Redirige al Home (o a Garajes, según prefieras)
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 
-  // 2. Ruta de Login (Añadida siguiendo tu esquema de carpetas)
- { 
-  path: 'login', 
-  loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent) 
+  { 
+    path: 'login', 
+    loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent) 
   },
 
-  // 3. Resto de módulos funcionales
   {
     path: 'favoritos',
-    canActivate: [authGuard], // ruta protegida, si no estas logueado no puedes entrar
+    canActivate: [authGuard],
     loadChildren: () => import('./features/favoritos/favoritos.routes').then(m => m.FAVORITOS_ROUTES)
   },
   {
@@ -28,12 +25,12 @@ export const routes: Routes = [
   },
   {
     path: 'mis-garajes',
-    canActivate: [authGuard],// ruta protegida, si no estas logueado no puedes entrar
+    canActivate: [authGuard],
     loadChildren: () => import('./features/mis-garajes/mis-garajes.routes').then(m => m.MIS_GARAJES_ROUTES)
   },
   {
     path: 'publicar',
-    canActivate: [authGuard],// ruta protegida, si no estas logueado no puedes entrar
+    canActivate: [authGuard],
     loadChildren: () => import('./features/publicar/publicar.routes').then(m => m.PUBLICAR_ROUTES)
   },
   {
@@ -45,7 +42,12 @@ export const routes: Routes = [
     component: NotificacionesComponent 
   },
   { 
-  path: 'gestion-reserva/:id', 
-  loadComponent: () => import('./features/reservas/gestion-reserva.component').then(m => m.GestionReservaComponent) 
-}
+    path: 'gestion-reserva/:id', 
+    loadComponent: () => import('./features/reservas/gestion-reserva.component').then(m => m.GestionReservaComponent) 
+  }, // <--- AQUÍ FALTABA ESTA COMA
+  { 
+    path: 'crear-reserva/:id', 
+    // He ajustado la ruta al archivo .ts según tu captura anterior
+    loadComponent: () => import('./features/reservas/pages/crear-reserva.component').then(m => m.CrearReservaComponent) 
+  }
 ];

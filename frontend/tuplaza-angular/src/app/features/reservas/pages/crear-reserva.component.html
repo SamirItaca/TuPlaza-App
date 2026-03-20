@@ -1,0 +1,52 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/garajes"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Reserva</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="form-container">
+    <div class="info-card">
+      <h2>Reserva ya</h2>
+      <p>Indica cuándo entrarás y saldrás de la plaza.</p>
+
+      <ion-list lines="none" class="transparent-list">
+        <ion-item class="custom-item">
+          <ion-icon name="calendar-outline" slot="start"></ion-icon>
+          <div class="label-group">
+            <ion-label>Entrada</ion-label>
+            <ion-datetime-button datetime="datetime-inicio"></ion-datetime-button>
+          </div>
+        </ion-item>
+
+        <ion-item class="custom-item">
+          <ion-icon name="time-outline" slot="start"></ion-icon>
+          <div class="label-group">
+            <ion-label>Salida</ion-label>
+            <ion-datetime-button datetime="datetime-fin"></ion-datetime-button>
+          </div>
+        </ion-item>
+      </ion-list>
+
+      <ion-button expand="block" class="btn-confirmar" (click)="enviarReserva()">
+        Confirmar Reserva
+      </ion-button>
+      <span class="nota">Pago seguro garantizado</span>
+    </div>
+  </div>
+
+  <ion-modal [keepContentsMounted]="true">
+    <ng-template>
+      <ion-datetime id="datetime-inicio" presentation="date-time" [(ngModel)]="reserva.fecha_inicio"></ion-datetime>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal [keepContentsMounted]="true">
+    <ng-template>
+      <ion-datetime id="datetime-fin" presentation="date-time" [(ngModel)]="reserva.fecha_fin"></ion-datetime>
+    </ng-template>
+  </ion-modal>
+</ion-content>

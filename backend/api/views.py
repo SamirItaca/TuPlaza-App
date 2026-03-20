@@ -31,52 +31,44 @@ class ReservaViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user
-    
-        # Intentamos obtener el perfil (Usuario) del usuario logueado
+        # Usamos try/except para evitar errores si el perfil no existe
         try:
-            perfil = user.perfil # 'perfil' es el related_name que pusiste en el OneToOneField
+            perfil = self.request.user.perfil 
+            # Filtramos: Reservas que yo hice O reservas de mis garajes
+            return Reserva.objects.filter(
+                Q(usuario=perfil) | Q(garaje__propietario=perfil)
+            ).distinct()
         except AttributeError:
             return Reserva.objects.none()
 
-        # Filtramos: 
-        # 1. Reservas donde el usuario es el que solicita (Arrendatario)
-        # 2. Reservas de garajes que pertenecen al usuario (Arrendador)
-        return Reserva.objects.filter(
-            Q(usuario=perfil) | Q(garaje__propietario=perfil)
-        ).distinct()
+    def perform_create(self, serializer):
+        # ¡IMPORTANTE! Aquí también necesitamos el PERFIL, no el USER
+        # Asignamos el perfil del usuario logueado como autor de la reserva
+        serializer.save(usuario=self.request.user.perfil)
 
     @action(detail=True, methods=['post'])
     def aceptar(self, request, pk=None):
         reserva = self.get_object()
-    
-    # IMPORTANTE: Comparamos el ID del USER vinculado al perfil del propietario
-    # con el ID del USER que hace la petición (request.user)
+        
+        # Validación de seguridad: solo el dueño del garaje acepta
         if reserva.garaje.propietario.user.id != request.user.id:
-            return Response({
-            'error': 'No tienes permiso sobre este garaje',
-            'debug': f"Propietario User ID: {reserva.garaje.propietario.user.id}, Tu ID: {request.user.id}"
-        }, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': 'No eres el dueño de este garaje'}, status=403)
 
-        try:
-            reserva.estado = 'confirmada'
-            reserva.save()
-        # ... resto de tu lógica ...
-            return Response({'status': 'Reserva aceptada'})
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        reserva.estado = 'confirmada'
+        reserva.save()
+        return Response({'status': 'Reserva aceptada'})
 
     @action(detail=True, methods=['post'])
     def rechazar(self, request, pk=None):
         reserva = self.get_object()
         
-        if reserva.garaje.propietario != request.user:
-            return Response({'error': 'No tienes permiso sobre este garaje'}, 
-                            status=status.HTTP_403_FORBIDDEN)
+        # Corregido: Comparamos IDs de usuario para evitar errores de tipo
+        if reserva.garaje.propietario.user.id != request.user.id:
+            return Response({'error': 'No tienes permiso'}, status=403)
             
         reserva.estado = 'cancelada'
         reserva.save()
-        return Response({'status': 'reserva rechazada'})
+        return Response({'status': 'Reserva rechazada'})
 class ResenaViewSet(viewsets.ModelViewSet):
     queryset = Resena.objects.all()
     serializer_class = ResenaSerializer

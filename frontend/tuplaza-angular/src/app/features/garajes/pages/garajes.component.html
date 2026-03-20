@@ -5,29 +5,46 @@
     <div *ngFor="let garaje of listaGarajes" class="card">
       
       <div class="image-container">
-        <img *ngIf="garaje.fotos.length > 0" [src]="garaje.fotos[0].imagen" alt="Foto del garaje">
+        <img *ngIf="garaje.fotos && garaje.fotos.length > 0; else noPhoto" 
+             [src]="garaje.fotos[0].imagen" 
+             alt="Foto del garaje">
+        <ng-template #noPhoto>
+          <img src="assets/img/garaje-placeholder.jpg" alt="Sin foto">
+        </ng-template>
         <div class="price-badge">{{ garaje.precio }}€ <small>/ día</small></div>
       </div>
 
-      <div class="card-content">
-        <span class="status-available" *ngIf="garaje.disponible">
-  Disponible
-</span>
-        
-        <h3 class="description">{{ garaje.descripcion }}</h3>
-        
-        <div class="owner-info">
-          <i class="icon-user"></i> 
-          <span>Propietario: <strong>{{ garaje.propietario_detalle.nombre }}</strong></span>
-        </div>
+<div class="card-content">
+  <span class="status-available" *ngIf="garaje.disponible">Disponible</span>
+  
+  <h3 class="description">{{ garaje.descripcion }}</h3>
+  
+  <div class="specs-container">
+    <div class="spec-item">
+      <ion-icon name="resize-outline"></ion-icon>
+      <span>{{ garaje.dimensiones || 'Estándar' }}</span>
+    </div>
+    <div class="spec-item">
+      <ion-icon name="location-outline"></ion-icon>
+      <span>Zaragoza</span>
+    </div>
+  </div>
 
-       <button class="btn-detalles">
-  <span>Ver detalles</span>
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-  </svg>
-</button>
-      </div>
+  <div class="owner-info">
+    <ion-icon name="person-circle-outline"></ion-icon> 
+    <span>Propietario: <strong>{{ garaje.propietario_detalle.nombre }}</strong></span>
+  </div>
+
+  <div class="card-actions">
+    <button class="btn-detalles-mini">Detalles</button>
+    <button class="btn-reservar-main" [routerLink]="['/crear-reserva', garaje.id]">
+      <span>Reservar</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+      </svg>
+    </button>
+  </div>
+</div>
     </div>
   </div>
 </div>

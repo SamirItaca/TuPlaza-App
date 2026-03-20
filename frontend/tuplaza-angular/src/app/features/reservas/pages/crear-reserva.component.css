@@ -1,0 +1,116 @@
+/* --- Global & Layout --- */
+ion-content {
+  /* Fondo gris para que la tarjeta blanca resalte con fuerza */
+  --background: #eeeeee; 
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  padding: 20px;
+}
+
+.info-card {
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 400px;
+
+  /* LA MISMA SOMBRA NEGRA PURA QUE EL LOGIN */
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), 
+              0 4px 15px rgba(0, 0, 0, 0.2); 
+
+  /* Borde gris fino para separar */
+  border: 1px solid #d1d1d1; 
+}
+
+/* --- Textos de Cabecera (Siguiendo el estilo .login-title) --- */
+.info-card h2 {
+  color: #9C4040;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.info-card p {
+  color: #000000;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  margin-bottom: 35px;
+  text-align: center;
+}
+
+/* --- Items y Selectores de Fecha --- */
+.custom-item {
+  margin-bottom: 22px;
+  --background: #ffffff; 
+  --border-radius: 14px;
+  /* Borde fuerte idéntico al login */
+  border: 2px solid #535252; 
+  transition: all 0.2s ease;
+  --padding-start: 16px;
+  --inner-padding-end: 16px;
+}
+
+ion-label {
+  color: #000000 !important; 
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  letter-spacing: 0.5px;
+}
+
+/* Ajuste específico para los botones de fecha de Ionic */
+ion-datetime-button {
+  --background: #f4f4f4;
+  --color: #1a1a1a;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+ion-icon {
+  color: #9C4040;
+  font-size: 1.4rem;
+  margin-right: 12px;
+}
+
+/* --- Botón de Confirmación --- */
+.btn-confirmar {
+  margin-top: 15px;
+  --background: #9C4040;
+  --background-activated: #7a3232;
+  --border-radius: 14px;
+  height: 58px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.8px;
+  text-transform: none;
+  --box-shadow: 0 8px 20px rgba(156, 64, 64, 0.25);
+  width: 100%;
+}
+
+.nota {
+  margin-top: 20px;
+  color: #4a5568;
+  font-size: 0.85rem;
+  text-align: center;
+  display: block;
+}
+
+/* --- Header de la página --- */
+ion-toolbar {
+  --background: #9C4040;
+  --color: #ffffff;
+  --border-style: none;
+}
+
+ion-title {
+  font-weight: 800;
+  letter-spacing: 1px;
+}
