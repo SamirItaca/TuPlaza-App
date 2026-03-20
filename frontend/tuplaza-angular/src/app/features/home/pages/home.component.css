@@ -1,0 +1,127 @@
+.home-content {
+  --background: #f4f4f4; /* El gris muy claro del fondo del mockup */
+}
+
+.home-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.main-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 15px;
+}
+
+/* El buscador horizontal del mockup */
+.search-section {
+  margin-bottom: 25px;
+}
+
+.search-box {
+  display: flex;
+  background: white;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border: 1px solid #ddd;
+  align-items: center;
+}
+
+.search-inputs {
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+
+.search-inputs input {
+  border: none;
+  padding: 10px 15px;
+  width: 50%;
+  outline: none;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.divider-v {
+  width: 1px;
+  height: 30px;
+  background: #eee;
+}
+
+.btn-reservar-ya {
+  background: #f5b7b7; /* El rosa/rojo suave del botón del mockup */
+  color: #1a1a1a;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-reservar-ya:hover {
+  background: #f2a4a4;
+}
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0 30px 0;
+}
+
+.search-pill {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 50px; /* Forma de cápsula */
+  padding: 8px 8px 8px 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  width: 100%;
+  max-width: 800px;
+  border: 1px solid #eee;
+}
+
+.input-section {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 10px;
+}
+
+.input-section ion-icon {
+  color: #888;
+  font-size: 1.2rem;
+}
+
+.input-section input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.v-divider {
+  width: 1px;
+  height: 30px;
+  background: #eee;
+  margin: 0 15px;
+}
+
+.btn-reservar {
+  background: #F5B7B7; /* El color rosa suave de tu mockup */
+  color: #222;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 40px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-reservar:hover {
+  background: #f2a4a4;
+  transform: scale(1.02);
+}

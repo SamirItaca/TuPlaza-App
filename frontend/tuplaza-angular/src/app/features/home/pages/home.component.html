@@ -1,2 +1,31 @@
-<h1>Home</h1>
-<p>Pantalla principal.</p>
+<ion-content [fullscreen]="true" class="home-content">
+  <div class="home-container">
+    
+    <div class="home-header">
+      <h1 class="main-title">Reserva tu Pla-ZA</h1>
+    </div>
+
+<div class="search-container">
+  <div class="search-pill">
+    <div class="input-section">
+      <ion-icon name="location-outline"></ion-icon>
+      <input type="text" placeholder="¿Dónde quieres aparcar?">
+    </div>
+    
+    <div class="v-divider"></div>
+    
+    <div class="input-section">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <input type="text" placeholder="¿Cuándo?">
+    </div>
+
+    <button class="btn-reservar">Reservar ya</button>
+  </div>
+</div>
+
+    <app-map-section></app-map-section>
+
+    <app-near-sites [garajes]="garajesCercanos"></app-near-sites>
+
+  </div>
+</ion-content>
