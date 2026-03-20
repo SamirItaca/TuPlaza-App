@@ -1,29 +1,32 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Iniciar Sesión - TuPlaZa</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content class="ion-padding">
   <div class="login-container">
-    <ion-item lines="full">
-      <ion-label position="floating">Usuario</ion-label>
-      <ion-input [(ngModel)]="credentials.username" type="text" placeholder="Tu nombre de usuario"></ion-input>
-    </ion-item>
+    <div class="login-card">
+      <h2 class="login-title">Bienvenido</h2>
+      <p class="login-subtitle">Gestiona tus reservas de garaje</p>
 
-    <ion-item lines="full">
-      <ion-label position="floating">Contraseña</ion-label>
-      <ion-input [(ngModel)]="credentials.password" type="password" placeholder="********"></ion-input>
-    </ion-item>
+      <ion-item lines="none">
+        <ion-icon name="person-outline" slot="start"></ion-icon>
+        <ion-label position="stacked">Usuario</ion-label>
+        <ion-input
+          type="text"
+          [(ngModel)]="credentials.username"
+          name="username"
+          placeholder="Ingresa tu nombre de usuario"
+        ></ion-input>
+      </ion-item>
 
-    <div class="ion-margin-top">
-      <ion-button expand="block" (click)="onLogin()" color="success">
-        Entrar
-      </ion-button>
+      <ion-item lines="none">
+        <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+        <ion-label position="stacked">Contraseña</ion-label>
+        <ion-input
+          type="password"
+          [(ngModel)]="credentials.password"
+          name="password"
+          placeholder="********"
+        ></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" class="btn-login" (click)="onLogin()"> Iniciar Sesión </ion-button>
     </div>
-
-    <ion-button expand="block" fill="clear" color="medium" size="small">
-      ¿No tienes cuenta? Regístrate
-    </ion-button>
   </div>
 </ion-content>

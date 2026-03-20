@@ -1,43 +1,59 @@
-<div class="main-container">
-  <h2 class="title">Mis Notificaciones</h2>
+<ion-content class="ion-padding">
+  <div class="header-container">
+    <br />
+    <br />
+    <br />
+    <br />
+    <h1 class="title">Tus Notificaciones</h1>
+    <p class="subtitle">Consulta o gestiona tus notificaciones aqui.</p>
+  </div>
 
-  <div class="grid-container">
-    @for (n of notifService.notificaciones$ | async; track n.id) {
-      
-      <div class="card-notif" 
-           [class.no-leida]="!n.leida" 
-           (click)="marcarLeida(n.id)">
-        
-        <span class="status-available">{{ n.tipo.replace('_', ' ') }}</span>
-        
-        <div class="card-content">
-          <h3 class="notif-title">{{ n.titulo }}</h3>
-          
-          <p class="notif-message">{{ n.mensaje }}</p>
-
-          <div class="notif-date">
-            <span>{{ n.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</span>
-            
-            @if (!n.leida) {
-              <span style="color: #9C4040; font-weight: bold;">● Nueva</span>
-            }
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-md="6" size-lg="4" *ngFor="let notif of reservas">
+        <ion-card class="reserva-card" [class.is-read]="notif.leida"> </ion-card>
+      </ion-col>
+      <ion-col size="12" size-md="6" size-lg="4" *ngFor="let notif of reservas">
+        <ion-card class="reserva-card">
+          <div class="status-badge" [ngClass]="notif.tipo.toLowerCase()">
+            {{ notif.tipo === 'NUEVA_RESERVA' ? 'Solicitud' : notif.tipo }}
           </div>
 
-          @if (n.reserva) {
-            <button class="btn-detalles" style="margin-top: 15px;">
-              Ver detalles de reserva
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-            </button>
-          }
-        </div>
-      </div>
+          <ion-card-header>
+            <div class="user-info">
+              <ion-icon name="notifications-outline" color="primary"></ion-icon>
+              <ion-card-title>{{ notif.titulo }}</ion-card-title>
+            </div>
+            <ion-card-subtitle>
+              <ion-icon name="time-outline"></ion-icon>
+              {{ notif.fecha_creacion | date: 'dd/MM/yyyy HH:mm' }}
+            </ion-card-subtitle>
+          </ion-card-header>
 
-    } @empty {
-      <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 40px;">
-        <p>No tienes notificaciones pendientes.</p>
-      </div>
-    }
+          <ion-card-content>
+            <div class="mensaje-container">
+              <p>{{ notif.mensaje }}</p>
+            </div>
+
+            <div class="actions">
+              <ion-button
+                expand="block"
+                fill="solid"
+                class="btn-detalles"
+                (click)="verDetalles(notif)"
+              >
+                <ion-icon name="eye-outline" slot="start"></ion-icon>
+                Ver Detalles
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div class="empty-state" *ngIf="reservas.length === 0">
+    <ion-icon name="notifications-off-outline"></ion-icon>
+    <p>No tienes solicitudes pendientes en este momento.</p>
   </div>
-</div>
+</ion-content>

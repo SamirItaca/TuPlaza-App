@@ -28,7 +28,7 @@ export class LoginComponent {
     this.authService.login(this.credentials).subscribe({
       next: (res) => {
         this.presentToast('¡Bienvenido a TuPlaZa!', 'success');
-        this.router.navigate(['/garajes']); // Te redirige a la lista
+        this.router.navigate(['/notificaciones']); // Te redirige a la lista de notificaciones 
       },
       error: (err) => {
         this.presentToast('Error: Usuario o contraseña incorrectos', 'danger');

@@ -1,0 +1,44 @@
+<ion-content class="ion-padding">
+  <div class="gestion-container" *ngIf="reserva">
+    <br>
+    <br>
+    <br>
+    <ion-card class="gestion-card">
+      <div class="header-estado">
+        <span class="estado-label">Estado de la Solicitud</span>
+        <span class="estado-valor">{{ reserva.estado | uppercase }}</span>
+      </div>
+
+      <div class="detalle-row">
+        <ion-icon name="person-outline"></ion-icon>
+        <div class="detalle-info">
+          <label>Solicitante</label>
+          <span>{{ reserva.cliente_username }}</span>
+        </div>
+      </div>
+
+      <div class="detalle-row">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <div class="detalle-info">
+          <label>Periodo de Reserva</label>
+          <span>{{ reserva.fecha_inicio | date:'short' }} - {{ reserva.fecha_fin | date:'short' }}</span>
+        </div>
+      </div>
+
+      <div class="precio-box">
+        <span>Total a recibir</span>
+        <span class="precio-total">{{ reserva.precio_total }}€</span>
+      </div>
+
+      <div class="footer-actions" *ngIf="reserva.estado === 'pendiente'">
+        <ion-button fill="outline" class="btn-rechazar" (click)="confirmarAccion('rechazar')">
+          Rechazar
+        </ion-button>
+        <ion-button class="btn-aceptar" (click)="confirmarAccion('aceptar')">
+          Aceptar
+        </ion-button>
+      </div>
+    </ion-card>
+
+  </div>
+</ion-content>

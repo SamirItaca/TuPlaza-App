@@ -1,0 +1,120 @@
+/* Contenedor principal para centrar la gestión en pantallas grandes */
+.gestion-container {
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+/* La Tarjeta Maestra */
+.gestion-card {
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(156, 64, 64, 0.05);
+  overflow: hidden;
+  padding-bottom: 20px;
+}
+
+/* Cabecera con el estado actual */
+.header-estado {
+  padding: 25px;
+  text-align: center;
+  background: #fdf2f2; /* Fondo sutil de tu rojo */
+  border-bottom: 1px solid rgba(156, 64, 64, 0.1);
+}
+
+.estado-label {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #9C4040;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.estado-valor {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+/* Sección de Detalles (Icono + Texto) */
+.detalle-row {
+  display: flex;
+  align-items: center;
+  padding: 15px 25px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.detalle-row ion-icon {
+  font-size: 1.6rem;
+  color: #9C4040;
+  margin-right: 15px;
+  background: #fff0f0;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.detalle-info label {
+  display: block;
+  font-size: 0.75rem;
+  color: #888;
+  font-weight: 600;
+}
+
+.detalle-info span {
+  font-size: 1rem;
+  color: #222;
+  font-weight: 500;
+}
+
+/* Sección del Precio (Destacada) */
+.precio-box {
+  margin: 25px;
+  padding: 20px;
+  background: #4d4a4a; /* Contraste fuerte en negro/gris oscuro */
+  border-radius: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.precio-total {
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+/* Botonera de Decisiones */
+.footer-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  padding: 0 25px;
+}
+
+/* Botón Aceptar (Sólido con tu rojo) */
+.btn-aceptar {
+  --background: #9C4040;
+  --color: white;
+  --border-radius: 14px;
+  --box-shadow: none;
+  font-weight: 700;
+  height: 55px;
+}
+
+/* Botón Rechazar (Outline para que no compita visualmente) */
+.btn-rechazar {
+  --border-color: #4d4a4a;
+   --background: #4d4a4a;
+  --color: white;
+  --border-radius: 14px;
+  font-weight: 600;
+  height: 55px;
+}
+
+
+/* Efectos interactivos */
+ion-button:active {
+  transform: scale(0.96);
+}

@@ -44,4 +44,8 @@ export const routes: Routes = [
     path: 'notificaciones', 
     component: NotificacionesComponent 
   },
+  { 
+  path: 'gestion-reserva/:id', 
+  loadComponent: () => import('./features/reservas/gestion-reserva.component').then(m => m.GestionReservaComponent) 
+}
 ];

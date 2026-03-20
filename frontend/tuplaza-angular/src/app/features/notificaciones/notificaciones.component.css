@@ -1,95 +1,117 @@
-:host {
-  display: block;
-  width: 100%;
-  background-color: #f0f2f5; 
-    min-height: 100vh;
-}
-
-.main-container {
-  padding: 20px;
-  max-width: 900px; /* Reducido para que no se estire tanto en PC */
-  margin: 0 auto;
-}
-
-.grid-container {
-  display: flex;
-  flex-direction: column; /* En notificaciones suele leerse mejor en lista que en rejilla */
-  gap: 16px;
-}
-
-.card-notif {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 18px;
-  /* Sombra más marcada para separar del fondo */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12); 
-  transition: all 0.2s ease-in-out;
-  cursor: pointer;
-  border-left: 5px solid #bdc3c7; /* Color neutro para leídas */
-  position: relative;
-}
-
-/* Estado No Leída: Contraste alto con tu rojo */
-.card-notif.no-leida {
-  border-left: 5px solid #9C4040;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
-  background-color: #fff;
-}
-
-.card-notif:hover {
-  transform: scale(1.01);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-/* Ajuste de Textos Informativos */
-.notif-title {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #1a1a1a; /* Negro casi puro para máximo contraste */
-  margin-bottom: 8px;
-}
-
-.notif-message {
-  font-size: 1rem;
-  color: #2d3436; /* Gris muy oscuro, muy legible */
-  line-height: 1.5;
-  margin-bottom: 12px;
-  white-space: pre-line;
-  font-weight: 500; /* Un poco más de grosor al texto */
-}
-
-.notif-date {
-  font-size: 0.85rem;
-  color: #2d3436; 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top: 1px solid #eee;
-  padding-top: 10px;
-}
-
-/* Badge de tipo más visible */
-.status-available {
-  background: #f8ecec;
-  color: #9C4040;
-  padding: 4px 12px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 700;
+/* Cabecera */
+.header-container {
+  padding: 10px 16px;
   margin-bottom: 10px;
-  display: inline-block;
 }
 
-/* Botón con el estilo de tu app */
+.title {
+  color: #9C4040;
+  font-weight: 800;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 0.95rem;
+  margin: 4px 0 0 0;
+}
+ion-content {
+  --background: #f4f5f8; /* Un gris muy claro que hace saltar el blanco de las cards */
+}
+
+/* Tarjeta de Reserva */
+.reserva-card {
+  background: #ffffff;
+  border-radius: 20px;
+  margin: 15px 10px;
+  /* Sombra más profunda para que la tarjeta "flote" sobre el fondo gris */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
+  border: none; 
+  transition: transform 0.3s ease;
+}
+
+.reserva-card:hover {
+  transform: translateY(-5px); /* Movimiento sutil al pasar el ratón */
+}
+
+/* 3. El Mensaje (Letras más oscuras y legibles) */
+.mensaje-container p {
+  white-space: pre-line;
+  border-left: 4px solid #9C4040; 
+  background: #fff9f9; /* Fondo casi blanco para no ensuciar el texto */
+  padding: 14px;
+  border-radius: 8px;
+  color: #1a1a1a; /* Negro casi puro para máximo contraste y oscuridad */
+  font-size: 0.95rem;
+  line-height: 1.6;
+  font-weight: 500; /* Un poco más de cuerpo a la fuente */
+}
+
+/* 4. Botón Detalles (Efecto interactivo real) */
 .btn-detalles {
+  --background: #9C4040; 
+  --color: #ffffff; 
+  --border-radius: 10px;
+  
+  /* Eliminamos la sombra roja intensa que lo hacía brillar de más */
+  --box-shadow: none; 
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  
+  font-weight: 600;
+  text-transform: none;
+  height: 48px;
+  margin-top: 15px;
+  transition: all 0.2s ease-in-out;
+}
+/* EFECTO INTERACTIVO: Al pasar el ratón (Hover) */
+.btn-detalles:hover {
+  filter: brightness(0.95);
+  transform: scale(1.02);   /* Crece ligeramente */
+}
+
+/* EFECTO INTERACTIVO: Al pulsar (Active) */
+.btn-detalles:active {
+  transform: scale(0.95);  /* Se hunde al presionar */
+  filter: brightness(0.9); /* Se oscurece un poco */
+}
+
+/* Estilo del badge para que no se pierda */
+.status-badge {
   background: #9C4040;
   color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-weight: 600;
-  width: auto; 
-  align-self: flex-start;
-  margin-top: 10px;
-  box-shadow: 0 4px 10px rgba(156, 64, 64, 0.2);
+  padding: 5px 12px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+ion-card-title {
+  color: #9C4040 !important;
+  font-weight: 700;
+}
+
+ion-icon[color="primary"], .user-info ion-icon {
+  color: #9C4040 !important;
+}
+
+/* Estilo para el estado vacío */
+.empty-state {
+  text-align: center;
+  margin-top: 50px;
+  color: #999;
+}
+
+.empty-state ion-icon {
+  font-size: 64px;
+  color: #ccc;
+  margin-bottom: 15px;
+}
+
+/* Opcional: Si decides no borrarlas y solo marcarlas como leídas */
+.reserva-card.is-read {
+  opacity: 0.6;
+  filter: grayscale(1);
+  pointer-events: none; /* Evita doble clic */
 }
